@@ -5,3 +5,5 @@ You may contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
 
 This is the result of numerous requests for an additional feature for the [RPi Smart Still](https://github.com/larry-athey/rpi-smart-still) system. However, this would actually be a stand-alone device rather than a feature of that system.
+
+People seem to think that it's possible for a computer to know what tastes they prefer (or not) in their distillate. Sorry, AI can't even do that because it would need gas chromatography to determine what's in it and at what levels and that's anything but a quick process. Then the AI would need to be trained on what you personally like or dislike.
