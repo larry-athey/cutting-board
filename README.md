@@ -9,3 +9,5 @@ This is the result of numerous requests for an additional feature for the [RPi S
 People seem to think that it's possible for a computer to know what flavors they prefer (or not) in their distillate. Sorry, AI can't even do that because it would require gas chromatography to determine what's in there, at what concentrations, and that's anything but a quick process. Then the AI would need to be trained on what you like or dislike. Seriously, lay off the sci-fi movies, they're anything but documentaries.
 
 No, Genio and iStill don't have this capability, either. The most they can do is pause the run so you can toss your heads/foreshots based on the volume and ABV of the wash in your boiler. Even still, that's just an approximation based on simple math, it's nothing high tech.
+
+This device allows you to automate your cuts by automatically swapping out jars once they are filled to approximately one inch from the top. These can be pint or quart size Mason jars placed on any diameter Lazy Susan turntable under your condenser outlet. The controller is calibrated to your choice of distance between jars and their height.
