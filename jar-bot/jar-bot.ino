@@ -1,5 +1,12 @@
 //------------------------------------------------------------------------------------------------
 // Jar-Bot - Cutting Board Brain | (CopyLeft) 2025-Present | Larry Athey (https://panhandleponics.com)
+//
+// The following lazy susan turntable is being used during development https://www.amazon.com/dp/B0C65XVDGS
+//
+// This is advertised as 14", it measures 350 mm in diameter. The CB-Flang-Gripper.stl model has a
+// diameter of 27 mm inside where the gripper teeth are. This will require a Nema 17 stepper motor
+// to be sent 324 pulses to rotate the turntable by 45 degrees. This will allow 8 pint size Mason
+// jars to be used for cuts and may be large or small mouth jars.
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
