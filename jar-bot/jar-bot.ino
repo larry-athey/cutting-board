@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------
 // Jar-Bot - Cutting Board Brain | (CopyLeft) 2025-Present | Larry Athey (https://panhandleponics.com)
 //
-// The following lazy susan turntable is being used during development https://www.amazon.com/dp/B0C65XVDGS
+// The following lazy susan turntable was used during development https://www.amazon.com/dp/B0C65XVDGS
 //
 // This is advertised as 14", it measures 350 mm in diameter. The CB-Flang-Gripper.stl model has a
 // diameter of 27 mm inside where the gripper teeth are. This will require a Nema 17 stepper motor
