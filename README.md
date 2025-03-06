@@ -12,4 +12,4 @@ Many people seem to think that it's possible for a computer to know what flavors
 
 No, Genio and iStill don't have this capability, either. The most they can do is pause the run so you can toss your heads/foreshots based on the volume and ABV of the wash in your boiler. What's more, it's just based on an approximation using simple math, there's honestly nothing high tech about it.
 
-This device allows you to automate your cuts by automatically swapping out jars once they are filled about one inch from the top. These can be pint or quart size Mason jars placed on any diameter Lazy Susan turntable under your condenser outlet. You simply calibrate the controller to the diameter of your turntable.
+This device allows you to automate your cuts by automatically swapping out jars once they are filled about one inch from the top. These can be pint or quart size Mason jars placed on any diameter Lazy Susan turntable under your condenser outlet. You simply calibrate the controller to the diameter of your turntable, cycle through the eight 45 degree positions and place your jars. 
