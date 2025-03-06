@@ -11,8 +11,26 @@
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
 #include "Preferences.h"         // ESP32 Flash memory read/write library
+#include "Wire.h"                // I2C communications library for touch-screen interface
 #define TOUCH_MODULES_CST_SELF   // Tell TouchLib.h to use the CST816 chip routines
 #include "TouchLib.h"            // LilyGo touch-screen interface library
+//------------------------------------------------------------------------------------------------
+// Internal GPIO constants
+#define SCL 17                   // I2C clock pin
+#define SDA 18                   // I2C data pin
+#define SCREEN_BACKLIGHT 38      // Screen backlight LED pin
+#define SCREEN_POWER_ON 15       // Screen power on/off pin
+#define INC_BTN 0                // Value + button
+#define DEC_BTN 14               // Value - button
+#define TOUCH_INT 16             // CPU interrupt monitor pin for touch-screen input hook
+#define TOUCH_RES 21             // Reset pin for touch-screen controller chip
+// External GPIO constants
+#define STEPPER_ENABLE_1 1       // Rotor stepper motor driver enable
+#define STEPPER_ENABLE_2 2       // Arm stepper motor driver enable
+#define STEPPER_PULSE 3          // Stepper motor pulse line (paralled for both DRV8825 drivers)
+#define STEPPER_DIRECTION 10     // Stepper motor direction (paralled for both DRV8825 drivers)
+#define FLOAT_SWITCH 11          // Optical float switch sense pin
+#define ARM_ZERO 12              // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
 Arduino_DataBus *bus = new Arduino_ESP32PAR8Q(7 /* DC */, 6 /* CS */, 8 /* WR */, 9 /* RD */,39 /* D0 */, 40 /* D1 */, 41 /* D2 */, 42 /* D3 */, 45 /* D4 */, 46 /* D5 */, 47 /* D6 */, 48 /* D7 */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 5 /* RST */, 0 /* rotation */, true /* IPS */, 170 /* width */, 320 /* height */, 35 /* col offset 1 */, 0 /* row offset 1 */, 35 /* col offset 2 */, 0 /* row offset 2 */);
