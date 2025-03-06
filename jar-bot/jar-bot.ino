@@ -3,10 +3,17 @@
 //
 // The following lazy susan turntable was used during development https://www.amazon.com/dp/B0C65XVDGS
 //
-// This is advertised as 14", it measures 350 mm in diameter. The CB-Flang-Gripper.stl model has a
+// This is advertised as 14", it measures 350 mm in diameter. The CB-Flange-Gripper.stl model has a
 // diameter of 27 mm inside where the gripper teeth are. This will require a Nema 17 stepper motor
-// to be sent 324 pulses to rotate the turntable by 45 degrees. This will allow 8 pint size Mason
-// jars to be used for cuts and may be large or small mouth jars.
+// to be sent 975 pulses to rotate the turntable by 45 degrees using full stepe in 5 seconds. If the
+// M0 pin on the DRV8825 drivers is pulled high, this changes the motors to run quieter using half
+// steps which requires 1950 steps for 45 degrees of movement in 10 seconds.
+//
+// Nema 17 motor to DRV8825 connections
+// Black → 1A
+// Green → 1B
+// Blue  → 2A
+// Red   → 2B
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
