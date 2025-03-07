@@ -40,9 +40,9 @@
 #define ARM_ZERO 12              // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
 int RotorSize = 15600;           // Turntable circumference in motor steps
+int JarDistance = 0;             // Total motor steps between jars (RotorSize / 8)
 int ArmUpperPos = 18000;         // Float arm upper position (400 steps per mm of vertical lift)
 int ArmLowerPos = 2000;          // Float arm lower position "                                 "
-int JarDistance = 0;             // Total motor steps between jars (RotorSize / 8)
 //------------------------------------------------------------------------------------------------
 Arduino_DataBus *bus = new Arduino_ESP32PAR8Q(7 /* DC */, 6 /* CS */, 8 /* WR */, 9 /* RD */,39 /* D0 */, 40 /* D1 */, 41 /* D2 */, 42 /* D3 */, 45 /* D4 */, 46 /* D5 */, 47 /* D6 */, 48 /* D7 */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 5 /* RST */, 0 /* rotation */, true /* IPS */, 170 /* width */, 320 /* height */, 35 /* col offset 1 */, 0 /* row offset 1 */, 35 /* col offset 2 */, 0 /* row offset 2 */);
@@ -69,21 +69,19 @@ void setup() {
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the last user settings from flash memory on startup
   preferences.begin("prefs",true);
-  /*UserTemp1 = preferences.getUInt("usertemp1",0);
-  UserTemp2 = preferences.getUInt("usertemp2",0);
-  UserTime  = preferences.getUInt("usertime",0);
-  UserPower = preferences.getUInt("userpower",0);
-  UserMode  = preferences.getUInt("usermode",0);*/
+  RotorSize   = preferences.getUInt("rotor_size",0);
+  JarDistance = preferences.getUInt("jar_distance",0);
+  ArmUpperPos = preferences.getUInt("arm_upper_pos",0);
+  ArmLowerPos = preferences.getUInt("arm_lower_pos",0);
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
 void SetMemory() { // Update flash memory with the current user settings
   preferences.begin("prefs",false);
-  /*preferences.putUInt("usertemp1",UserTemp1);
-  preferences.putUInt("usertemp2",UserTemp2);
-  preferences.putUInt("usertime",UserTime);
-  preferences.putUInt("userpower",UserPower);
-  preferences.putUInt("usermode",UserMode);*/
+  preferences.putUInt("rotor_size",RotorSize);
+  preferences.putUInt("jar_distance",JarDistance);
+  preferences.putUInt("arm_upper_pos",ArmUpperPos);
+  preferences.putUInt("arm_lower_pos",ArmLowerPos);
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
