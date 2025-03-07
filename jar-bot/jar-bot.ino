@@ -40,7 +40,7 @@
 #define ARM_ZERO 12              // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
 int RotorSize = 15600;           // Turntable circumference in motor steps
-int JarDistance = 0;             // Total motor steps between jars (RotorSize / 8)
+int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
 int ArmUpperPos = 18000;         // Float arm upper position (400 steps per mm of vertical lift)
 int ArmLowerPos = 2000;          // Float arm lower position "                                 "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
