@@ -34,8 +34,8 @@
 // External GPIO constants
 #define STEPPER_ENABLE_1 1       // Rotor stepper motor driver enable
 #define STEPPER_ENABLE_2 2       // Arm stepper motor driver enable
-#define STEPPER_PULSE 3          // Stepper motor pulse line (paralled for both DRV8825 drivers)
-#define STEPPER_DIRECTION 10     // Stepper motor direction (paralled for both DRV8825 drivers)
+#define STEPPER_PULSE 3          // Stepper motor pulse line (paralleled for both DRV8825 drivers)
+#define STEPPER_DIRECTION 10     // Stepper motor direction (paralleled for both DRV8825 drivers)
 #define FLOAT_SWITCH 11          // Optical float switch sense pin
 #define ARM_ZERO 12              // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
