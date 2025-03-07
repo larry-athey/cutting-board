@@ -87,6 +87,7 @@ void setup() {
   canvas->begin();
   ScreenUpdate();
 
+  InitializeArm();
 }
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the last user settings from flash memory on startup
@@ -107,8 +108,14 @@ void SetMemory() { // Update flash memory with the current user settings
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
-void ScreenUpdate() {
+void InitializeArm() {
 
+}
+//------------------------------------------------------------------------------------------------
+void ScreenUpdate() {
+  canvas->fillScreen(BLACK);
+
+  canvas->flush();
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
