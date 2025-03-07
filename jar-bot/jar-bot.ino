@@ -65,6 +65,28 @@ void setup() {
     SetMemory();
   }
 
+  // Initialize the touch-screen reset line
+  pinMode(TOUCH_RES,OUTPUT);
+  digitalWrite(TOUCH_RES,LOW);
+  delay(500);
+  digitalWrite(TOUCH_RES,HIGH);
+
+  // Power up the screen and backlight
+  pinMode(SCREEN_POWER_ON,OUTPUT);
+  digitalWrite(SCREEN_POWER_ON,HIGH);
+  ledcSetup(0,2000,8);
+  ledcAttachPin(SCREEN_BACKLIGHT,0);
+  ledcWrite(0,255); // Screen brightness (0-255)
+
+  // Initialize the graphics library and blank the screen
+  gfx->begin();
+  gfx->setRotation(3);
+  gfx->fillScreen(BLACK);
+
+  // In order to eliminate screen flicker, everything is plotted to an off-screen buffer and popped onto the screen when done
+  canvas->begin();
+  ScreenUpdate();
+
 }
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the last user settings from flash memory on startup
@@ -83,6 +105,10 @@ void SetMemory() { // Update flash memory with the current user settings
   preferences.putUInt("arm_upper_pos",ArmUpperPos);
   preferences.putUInt("arm_lower_pos",ArmLowerPos);
   preferences.end();
+}
+//------------------------------------------------------------------------------------------------
+void ScreenUpdate() {
+
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
