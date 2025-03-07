@@ -61,7 +61,10 @@ void setup() {
   GetMemory();
   if (JarDistance == 0) {
     // New chip, flash memory not initialized
+    RotorSize   = 15600;
     JarDistance = RotorSize / 8;
+    ArmUpperPos = 18000;
+    ArmLowerPos = 2000;
     SetMemory();
   }
 
@@ -87,10 +90,11 @@ void setup() {
   canvas->begin();
   ScreenUpdate();
 
+  // Initialize the float arm by raising it 10 mm and then lowering it until the limit switch triggers
   InitializeArm();
 }
 //------------------------------------------------------------------------------------------------
-void GetMemory() { // Get the last user settings from flash memory on startup
+void GetMemory() { // Get the last calibration settings from flash memory on startup
   preferences.begin("prefs",true);
   RotorSize   = preferences.getUInt("rotor_size",0);
   JarDistance = preferences.getUInt("jar_distance",0);
@@ -99,7 +103,7 @@ void GetMemory() { // Get the last user settings from flash memory on startup
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
-void SetMemory() { // Update flash memory with the current user settings
+void SetMemory() { // Update flash memory with the current calibration settings
   preferences.begin("prefs",false);
   preferences.putUInt("rotor_size",RotorSize);
   preferences.putUInt("jar_distance",JarDistance);
@@ -108,11 +112,11 @@ void SetMemory() { // Update flash memory with the current user settings
   preferences.end();
 }
 //------------------------------------------------------------------------------------------------
-void InitializeArm() {
+void InitializeArm() { // Set the float arm to it's lower limit position to locate absolute zero
 
 }
 //------------------------------------------------------------------------------------------------
-void ScreenUpdate() {
+void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
   canvas->fillScreen(BLACK);
 
   canvas->flush();
