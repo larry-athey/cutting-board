@@ -100,6 +100,7 @@ void setup() {
 
   // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
   InitializeArm();
+  SetArmPos(ArmUpperPos);
 }
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the last calibration settings from flash memory on startup
@@ -138,6 +139,10 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
     delayMicroseconds(StepperPulse);
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
+}
+//------------------------------------------------------------------------------------------------
+void SetArmPos(int Position) {
+
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
