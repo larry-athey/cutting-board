@@ -2,18 +2,15 @@
 // Jar-Bot - Cutting Board Brain | (CopyLeft) 2025-Present | Larry Athey (https://panhandleponics.com)
 //
 // The following lazy susan turntable was used during development https://www.amazon.com/dp/B0C65XVDGS
-//
-// This is advertised as 14", it measures 350 mm in diameter. The CB-Flange-Gripper.stl model has a
-// diameter of 27 mm inside where the gripper teeth are. This will require a Nema 17 stepper motor
-// to be sent 975 pulses to rotate the turntable by 45 degrees using full stepe in 5 seconds. If the
-// M0 pin on the DRV8825 drivers is pulled high, this changes the motors to run quieter using half
-// steps which requires 1950 steps for 45 degrees of movement in 10 seconds.
+// This is advertised as 14", but measures 350 mm in diameter.
 //
 // Nema 17 motor to DRV8825 connections
 // Black → 1A
 // Green → 1B
 // Blue  → 2A
 // Red   → 2B
+//
+// 1/8 step (1600 steps per revolution) M0-High, M1-High, M2-Low
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
@@ -37,13 +34,15 @@
 #define STEPPER_PULSE 3          // Stepper motor pulse line (paralleled for both DRV8825 drivers)
 #define STEPPER_DIRECTION 10     // Stepper motor direction (paralleled for both DRV8825 drivers)
 #define FLOAT_SWITCH 11          // Optical float switch sense pin
-#define ARM_ZERO 12              // Optical arm zero position sense pin
+#define ARM_ZERO_SWITCH 12       // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
-int RotorSize = 15600;           // Turntable circumference in motor steps
+int RotorSize = 20736;           // Turntable circumference in motor steps
 int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
-int ArmUpperPos = 18000;         // Float arm upper position (400 steps per mm of vertical lift)
-int ArmLowerPos = 2000;          // Float arm lower position "                                 "
+int ArmUpperPos = 64000;         // Float arm upper position (1600 steps per mm of vertical lift)
+int ArmLowerPos = 32000;         // Float arm lower position "                                  "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
+int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
+int MotorSteps = 1600;           // Stepper motor steps per rotation
 //------------------------------------------------------------------------------------------------
 Arduino_DataBus *bus = new Arduino_ESP32PAR8Q(7 /* DC */, 6 /* CS */, 8 /* WR */, 9 /* RD */,39 /* D0 */, 40 /* D1 */, 41 /* D2 */, 42 /* D3 */, 45 /* D4 */, 46 /* D5 */, 47 /* D6 */, 48 /* D7 */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 5 /* RST */, 0 /* rotation */, true /* IPS */, 170 /* width */, 320 /* height */, 35 /* col offset 1 */, 0 /* row offset 1 */, 35 /* col offset 2 */, 0 /* row offset 2 */);
@@ -58,14 +57,22 @@ void setup() {
   delay(1000);
   Serial.println("");
 
+  // Initialize the external device GPIO pins
+  pinMode(STEPPER_ENABLE_1,OUTPUT); digitalWrite(STEPPER_ENABLE_1,LOW);
+  pinMode(STEPPER_ENABLE_2,OUTPUT); digitalWrite(STEPPER_ENABLE_2,LOW);
+  pinMode(STEPPER_PULSE,OUTPUT);
+  pinMode(STEPPER_DIRECTION,OUTPUT);
+  pinMode(FLOAT_SWITCH,INPUT_PULLUP);    // GPIO pin goes low when the light beam is obstructed
+  pinMode(ARM_ZERO_SWITCH,INPUT_PULLUP); // "                                                 "
+
   // Get the last calibration settings from flash memory
   GetMemory();
   if (JarDistance == 0) {
     // New chip, flash memory not initialized
-    RotorSize   = 15600;
+    RotorSize   = 20736;
     JarDistance = RotorSize / 8;
-    ArmUpperPos = 18000;
-    ArmLowerPos = 2000;
+    ArmUpperPos = 64000;
+    ArmLowerPos = 32000;
     SetMemory();
   }
 
@@ -91,7 +98,7 @@ void setup() {
   canvas->begin();
   ScreenUpdate();
 
-  // Initialize the float arm by raising it 10 mm and then lowering it until the lower limit switch triggers
+  // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
   InitializeArm();
 }
 //------------------------------------------------------------------------------------------------
@@ -114,7 +121,23 @@ void SetMemory() { // Update flash memory with the current calibration settings
 }
 //------------------------------------------------------------------------------------------------
 void InitializeArm() { // Set the float arm to it's lower limit position to locate absolute zero
-
+  digitalWrite(STEPPER_ENABLE_2,HIGH);
+  delay(10);
+  digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
+  for (int x = 1; x < (MotorSteps * 5); x ++) { // Raise the arm 5 mm
+    digitalWrite(STEPPER_PULSE,HIGH);
+    delayMicroseconds(StepperPulse);
+    digitalWrite(STEPPER_PULSE,LOW);
+    delayMicroseconds(StepperPulse);
+  }
+  digitalWrite(STEPPER_DIRECTION,LOW); // Counter-Clockwise
+  while(digitalRead(ARM_ZERO_SWITCH) == HIGH) { // Lower the arm to find zero
+    digitalWrite(STEPPER_PULSE,HIGH);
+    delayMicroseconds(StepperPulse);
+    digitalWrite(STEPPER_PULSE,LOW);
+    delayMicroseconds(StepperPulse);
+  }
+  digitalWrite(STEPPER_ENABLE_2,LOW);
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
