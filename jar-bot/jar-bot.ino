@@ -105,16 +105,15 @@ void setup() {
 void GetMemory() { // Get the last calibration settings from flash memory on startup
   preferences.begin("prefs",true);
   RotorSize   = preferences.getUInt("rotor_size",0);
-  JarDistance = preferences.getUInt("jar_distance",0);
   ArmUpperPos = preferences.getUInt("arm_upper_pos",0);
   ArmLowerPos = preferences.getUInt("arm_lower_pos",0);
   preferences.end();
+  JarDistance = RotorSize / 8;
 }
 //------------------------------------------------------------------------------------------------
 void SetMemory() { // Update flash memory with the current calibration settings
   preferences.begin("prefs",false);
   preferences.putUInt("rotor_size",RotorSize);
-  preferences.putUInt("jar_distance",JarDistance);
   preferences.putUInt("arm_upper_pos",ArmUpperPos);
   preferences.putUInt("arm_lower_pos",ArmLowerPos);
   preferences.end();
@@ -153,6 +152,7 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
     return;
   }
   digitalWrite(STEPPER_ENABLE_2,HIGH);
+  delay(10);
   for (int x = 1; x <= Steps; x ++) {
     digitalWrite(STEPPER_PULSE,HIGH);
     delayMicroseconds(StepperPulse);
@@ -163,8 +163,9 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
 }
 //------------------------------------------------------------------------------------------------
 void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forward or backward
-  digitalWrite(STEPPER_ENABLE_1,HIGH);
   digitalWrite(STEPPER_DIRECTION,Direction);
+  digitalWrite(STEPPER_ENABLE_1,HIGH);
+  delay(10);
   for (int x = 1; x <= JarDistance; x ++) {
     digitalWrite(STEPPER_PULSE,HIGH);
     delayMicroseconds(StepperPulse);
