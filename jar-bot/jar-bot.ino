@@ -182,6 +182,20 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
   digitalWrite(STEPPER_ENABLE_2,LOW);
 }
 //------------------------------------------------------------------------------------------------
+void BumpArm(byte Direction, int Steps) {
+  digitalWrite(STEPPER_DIRECTION,Direction);
+  digitalWrite(STEPPER_ENABLE_2,HIGH);
+  delay(10);
+  for (int x = 1; x <= Steps; x ++) {
+    digitalWrite(STEPPER_PULSE,HIGH);
+    delayMicroseconds(StepperPulse);
+    digitalWrite(STEPPER_PULSE,LOW);
+    delayMicroseconds(StepperPulse);
+    if (digitalRead(ARM_ZERO_SWITCH) == LOW) break;
+  }
+  digitalWrite(STEPPER_ENABLE_2,LOW);
+}
+//------------------------------------------------------------------------------------------------
 void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forward or backward
   digitalWrite(STEPPER_DIRECTION,Direction);
   digitalWrite(STEPPER_ENABLE_1,HIGH);
@@ -201,6 +215,19 @@ void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
   SetArmPos(ArmLowerPos);
 }
 //-----------------------------------------------------------------------------------------------
+void BumpRotor(byte Direction, int Steps) {
+  digitalWrite(STEPPER_DIRECTION,Direction);
+  digitalWrite(STEPPER_ENABLE_1,HIGH);
+  delay(10);
+  for (int x = 1; x <= Steps; x ++) {
+    digitalWrite(STEPPER_PULSE,HIGH);
+    delayMicroseconds(StepperPulse);
+    digitalWrite(STEPPER_PULSE,LOW);
+    delayMicroseconds(StepperPulse);
+  }
+  digitalWrite(STEPPER_ENABLE_1,LOW);
+}
+//------------------------------------------------------------------------------------------------
 void DrawButton(byte WhichOne) { // Draws and highlights the specified button on the screen
 
 }
