@@ -70,7 +70,6 @@ void setup() {
   if (JarDistance == 0) {
     // New chip, flash memory not initialized
     RotorSize   = 20736;
-    JarDistance = RotorSize / 8;
     ArmUpperPos = 64000;
     ArmLowerPos = 32000;
     SetMemory();
@@ -119,6 +118,7 @@ void SetMemory() { // Update flash memory with the current calibration settings
   preferences.putUInt("arm_upper_pos",ArmUpperPos);
   preferences.putUInt("arm_lower_pos",ArmLowerPos);
   preferences.end();
+  JarDistance = RotorSize / 8;
 }
 //------------------------------------------------------------------------------------------------
 void InitializeArm() { // Set the float arm to it's lower limit position to locate absolute zero
@@ -160,6 +160,18 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
     delayMicroseconds(StepperPulse);
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
+}
+//------------------------------------------------------------------------------------------------
+void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forward or backward
+  digitalWrite(STEPPER_ENABLE_1,HIGH);
+  digitalWrite(STEPPER_DIRECTION,Direction);
+  for (int x = 1; x <= JarDistance; x ++) {
+    digitalWrite(STEPPER_PULSE,HIGH);
+    delayMicroseconds(StepperPulse);
+    digitalWrite(STEPPER_PULSE,LOW);
+    delayMicroseconds(StepperPulse);
+  }
+  digitalWrite(STEPPER_ENABLE_1,LOW);
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
