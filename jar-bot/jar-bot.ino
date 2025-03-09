@@ -42,7 +42,7 @@ int ArmUpperPos = 64000;         // Float arm upper position (1600 steps per mm 
 int ArmLowerPos = 32000;         // Float arm lower position "                                  "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
-int MotorSteps = 1600;           // Stepper motor steps per rotation
+int MotorSteps = 1600;           // Stepper motor steps per revolution
 //------------------------------------------------------------------------------------------------
 Arduino_DataBus *bus = new Arduino_ESP32PAR8Q(7 /* DC */, 6 /* CS */, 8 /* WR */, 9 /* RD */,39 /* D0 */, 40 /* D1 */, 41 /* D2 */, 42 /* D3 */, 45 /* D4 */, 46 /* D5 */, 47 /* D6 */, 48 /* D7 */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 5 /* RST */, 0 /* rotation */, true /* IPS */, 170 /* width */, 320 /* height */, 35 /* col offset 1 */, 0 /* row offset 1 */, 35 /* col offset 2 */, 0 /* row offset 2 */);
@@ -125,7 +125,7 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
   digitalWrite(STEPPER_ENABLE_2,HIGH);
   delay(10);
   digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
-  for (int x = 1; x < (MotorSteps * 5); x ++) { // Raise the arm 5 mm
+  for (int x = 1; x <= (MotorSteps * 5); x ++) { // Raise the arm 5 mm (threaded rod with 1 mm pitch)
     digitalWrite(STEPPER_PULSE,HIGH);
     delayMicroseconds(StepperPulse);
     digitalWrite(STEPPER_PULSE,LOW);
@@ -142,7 +142,24 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
 }
 //------------------------------------------------------------------------------------------------
 void SetArmPos(int Position) {
-
+  int Steps;
+  if (Position > ArmCurrentPos) {
+    digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
+    Steps = Position - ArmCurrentPos;
+  } else if (Position < ArmCurrentPos) {
+    digitalWrite(STEPPER_DIRECTION,LOW); // Counter-Clockwise
+    Steps = ArmCurrentPos - Position;
+  } else {
+    return;
+  }
+  digitalWrite(STEPPER_ENABLE_2,HIGH);
+  for (int x = 1; x <= Steps; x ++) {
+    digitalWrite(STEPPER_PULSE,HIGH);
+    delayMicroseconds(StepperPulse);
+    digitalWrite(STEPPER_PULSE,LOW);
+    delayMicroseconds(StepperPulse);
+  }
+  digitalWrite(STEPPER_ENABLE_2,LOW);
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
