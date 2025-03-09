@@ -212,6 +212,7 @@ bool RegionPressed(int Xpos,int Ypos,int X1,int Y1,int X2,int Y2) { // Screen bu
 }
 //-----------------------------------------------------------------------------------------------
 void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
+  // If Xpos is a negative number, the user has pressed the home button, Ypos is irrelevant
 
 }
 //------------------------------------------------------------------------------------------------
