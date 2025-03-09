@@ -46,6 +46,7 @@ int StepperPulse = 965;          // Stepper motor pulse width per on/off state (
 int MotorSteps = 1600;           // Stepper motor steps per revolution
 byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
 byte ActiveButton = 0;           // Currently selected touch-screen button
+String Version = "1.0.1";        // Current release version of the project
 //------------------------------------------------------------------------------------------------
 Arduino_DataBus *bus = new Arduino_ESP32PAR8Q(7 /* DC */, 6 /* CS */, 8 /* WR */, 9 /* RD */,39 /* D0 */, 40 /* D1 */, 41 /* D2 */, 42 /* D3 */, 45 /* D4 */, 46 /* D5 */, 47 /* D6 */, 48 /* D7 */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 5 /* RST */, 0 /* rotation */, true /* IPS */, 170 /* width */, 320 /* height */, 35 /* col offset 1 */, 0 /* row offset 1 */, 35 /* col offset 2 */, 0 /* row offset 2 */);
@@ -367,7 +368,11 @@ void loop() {
   // Check for Value- keypresses and handle as necessary
   if (digitalRead(DEC_BTN) == 0) ProcessButton(0);
   // If not in configuation mode, check the float switch and advance to the next jar if necessary
-  if ((CurrentMode == 1) && (digitalRead(FLOAT_SWITCH) == LOW)) JarAdvance(1);
+  if ((CurrentMode == 1) && (digitalRead(FLOAT_SWITCH) == LOW)) {
+    ActiveButton = 1;
+    ScreenUpdate();
+    JarAdvance(1);
+  }
   // Give the CPU a break between loops
   delay(10);
 }
