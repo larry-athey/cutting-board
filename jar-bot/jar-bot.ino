@@ -36,6 +36,7 @@
 #define FLOAT_SWITCH 11          // Optical float switch sense pin
 #define ARM_ZERO_SWITCH 12       // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
+bool GotInterrupt = false;       // True if touch input has been detected on the screen
 int RotorSize = 20736;           // Rotor (turntable) circumference in motor steps
 int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
 int ArmUpperPos = 64000;         // Float arm upper position (1600 steps per mm of vertical lift)
@@ -81,6 +82,14 @@ void setup() {
   digitalWrite(TOUCH_RES,LOW);
   delay(500);
   digitalWrite(TOUCH_RES,HIGH);
+
+  Wire.begin(SDA,SCL);
+  if (Touch.init()) {
+    Serial.println("Touch screen interface initialized");
+    attachInterrupt(TOUCH_INT,[] { GotInterrupt = true; },FALLING);
+  } else {
+    Serial.println("Touch screen interface not detected");
+  }
 
   // Power up the screen and backlight
   pinMode(SCREEN_POWER_ON,OUTPUT);
@@ -189,9 +198,32 @@ void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch
 
   canvas->flush();
 }
+//-----------------------------------------------------------------------------------------------
+void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
+
+}
+//------------------------------------------------------------------------------------------------
+void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
+  byte HoldCounter = 0;
+
+}
 //------------------------------------------------------------------------------------------------
 void loop() {
-
-
+  // Check for touch-screen presses and handle as necessary
+  if (GotInterrupt) {
+    if (Touch.read()) {
+      int Xpos,Ypos;
+      TP_Point Point = Touch.getPoint(0);
+      Xpos = 320 - Point.y; // Touch.setRotation() doesn't work for some reason
+      Ypos = Point.x;       // "                                              "
+      ProcessTouch(Xpos,Ypos);
+      while (Touch.read()) delay(10);
+    }
+    GotInterrupt = false;
+  }
+  // Check for Value+ keypresses and handle as necessary
+  if (digitalRead(INC_BTN) == 0) ProcessButton(1);
+  // Check for Value- keypresses and handle as necessary
+  if (digitalRead(DEC_BTN) == 0) ProcessButton(0);
 }
 //------------------------------------------------------------------------------------------------
