@@ -177,7 +177,10 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
     delayMicroseconds(StepperPulse);
     digitalWrite(STEPPER_PULSE,LOW);
     delayMicroseconds(StepperPulse);
-    if (digitalRead(ARM_ZERO_SWITCH) == LOW) break;
+    if (digitalRead(ARM_ZERO_SWITCH) == LOW) {
+      ArmCurrentPos = 0;
+      break;
+    }
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
 }
@@ -191,7 +194,16 @@ void BumpArm(byte Direction, int Steps) {
     delayMicroseconds(StepperPulse);
     digitalWrite(STEPPER_PULSE,LOW);
     delayMicroseconds(StepperPulse);
-    if (digitalRead(ARM_ZERO_SWITCH) == LOW) break;
+    if (digitalRead(ARM_ZERO_SWITCH) == LOW) {
+      ArmCurrentPos = 0;
+      break;
+    } else {
+      if (Direction == 1) {
+        ArmCurrentPos ++;
+      } else {
+        ArmCurrentPos --;
+      }
+    }
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
 }
