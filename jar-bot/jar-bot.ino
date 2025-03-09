@@ -44,7 +44,6 @@ int ArmLowerPos = 32000;         // Float arm lower position "                  
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
 int MotorSteps = 1600;           // Stepper motor steps per revolution
-int OneDegree = MototSteps / 360;// Stepper motor steps for one degree of rotation
 byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
 byte ActiveButton = 0;           // Currently selected touch-screen button
 //------------------------------------------------------------------------------------------------
