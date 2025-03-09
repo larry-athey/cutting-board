@@ -44,7 +44,9 @@ int ArmLowerPos = 32000;         // Float arm lower position "                  
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
 int MotorSteps = 1600;           // Stepper motor steps per revolution
+int OneDegree = MototSteps / 360;// Stepper motor steps for one degree of rotation
 byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
+byte ActiveButton = 0;           // Currently selected touch-screen button
 //------------------------------------------------------------------------------------------------
 Arduino_DataBus *bus = new Arduino_ESP32PAR8Q(7 /* DC */, 6 /* CS */, 8 /* WR */, 9 /* RD */,39 /* D0 */, 40 /* D1 */, 41 /* D2 */, 42 /* D3 */, 45 /* D4 */, 46 /* D5 */, 47 /* D6 */, 48 /* D7 */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 5 /* RST */, 0 /* rotation */, true /* IPS */, 170 /* width */, 320 /* height */, 35 /* col offset 1 */, 0 /* row offset 1 */, 35 /* col offset 2 */, 0 /* row offset 2 */);
@@ -159,6 +161,7 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
 //------------------------------------------------------------------------------------------------
 void SetArmPos(int Position) { // Move the float arm up or down to a specific position
   int Steps;
+
   if (Position > ArmCurrentPos) {
     digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
     Steps = Position - ArmCurrentPos;
@@ -191,6 +194,12 @@ void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forw
     delayMicroseconds(StepperPulse);
   }
   digitalWrite(STEPPER_ENABLE_1,LOW);
+}
+//-----------------------------------------------------------------------------------------------
+void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
+  SetArmPos(ArmUpperPos);
+  SwitchJars(Direction);
+  SetArmPos(ArmLowerPos);
 }
 //-----------------------------------------------------------------------------------------------
 void DrawButton(byte WhichOne) { // Draws and highlights the specified button on the screen
@@ -253,6 +262,34 @@ void DecValue(byte WhichOne) { // Decrement the value associated with the active
 void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
   byte HoldCounter = 0;
 
+  if (WhichOne == 1) {
+    // Increment active screen button value by 1
+    IncValue(ActiveButton);
+    while (digitalRead(INC_BTN) == 0) {
+      delay(10);
+      HoldCounter ++;
+      if (HoldCounter == 150) { // User is intentionally holding the + button
+        while (digitalRead(INC_BTN) == 0) {
+          IncValue(ActiveButton);
+          delay(250);
+        }
+      }
+    }
+  } else {
+    // Decrement active screen button value by 1
+    DecValue(ActiveButton);
+    while (digitalRead(DEC_BTN) == 0) {
+      delay(10);
+      HoldCounter ++;
+      if (HoldCounter == 150) { // User is intentionally holding the - button
+        while (digitalRead(DEC_BTN) == 0) {
+          DecValue(ActiveButton);
+          delay(250);
+        }
+      }
+    }
+  }
+  if (CurrentMode > 1) SetMemory();
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
@@ -273,11 +310,7 @@ void loop() {
   // Check for Value- keypresses and handle as necessary
   if (digitalRead(DEC_BTN) == 0) ProcessButton(0);
   // If not in configuation mode, check the float switch and advance to the next jar if necessary
-  if ((CurrentMode == 1) && (digitalRead(FLOAT_SWITCH) == LOW)) {
-    SetArmPos(ArmUpperPos);
-    SwitchJars(1);
-    SetArmPos(ArmLowerPos);
-  }
+  if ((CurrentMode == 1) && (digitalRead(FLOAT_SWITCH) == LOW)) JarAdvance(1);
   // Give the CPU a break between loops
   delay(10);
 }
