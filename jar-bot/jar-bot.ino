@@ -36,13 +36,14 @@
 #define FLOAT_SWITCH 11          // Optical float switch sense pin
 #define ARM_ZERO_SWITCH 12       // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
-int RotorSize = 20736;           // Turntable circumference in motor steps
+int RotorSize = 20736;           // Rotor (turntable) circumference in motor steps
 int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
 int ArmUpperPos = 64000;         // Float arm upper position (1600 steps per mm of vertical lift)
 int ArmLowerPos = 32000;         // Float arm lower position "                                  "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
 int MotorSteps = 1600;           // Stepper motor steps per revolution
+byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
 //------------------------------------------------------------------------------------------------
 Arduino_DataBus *bus = new Arduino_ESP32PAR8Q(7 /* DC */, 6 /* CS */, 8 /* WR */, 9 /* RD */,39 /* D0 */, 40 /* D1 */, 41 /* D2 */, 42 /* D3 */, 45 /* D4 */, 46 /* D5 */, 47 /* D6 */, 48 /* D7 */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 5 /* RST */, 0 /* rotation */, true /* IPS */, 170 /* width */, 320 /* height */, 35 /* col offset 1 */, 0 /* row offset 1 */, 35 /* col offset 2 */, 0 /* row offset 2 */);
@@ -99,7 +100,14 @@ void setup() {
 
   // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
   InitializeArm();
+  // Raise the float arm to its upper position
   SetArmPos(ArmUpperPos);
+  // Move the rotor 45 degrees forward
+  SwitchJars(1);
+  // Move the rotor back
+  SwitchJars(0);
+  // Lower the float arm to its down position
+  SetArmPos(ArmLowerPos);
 }
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the last calibration settings from flash memory on startup
@@ -158,6 +166,7 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
     delayMicroseconds(StepperPulse);
     digitalWrite(STEPPER_PULSE,LOW);
     delayMicroseconds(StepperPulse);
+    if (digitalRead(ARM_ZERO_SWITCH) == LOW) break;
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
 }
