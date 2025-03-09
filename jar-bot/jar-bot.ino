@@ -141,7 +141,7 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
   digitalWrite(STEPPER_ENABLE_2,LOW);
 }
 //------------------------------------------------------------------------------------------------
-void SetArmPos(int Position) {
+void SetArmPos(int Position) { // Move the float arm up or down to a specific position
   int Steps;
   if (Position > ArmCurrentPos) {
     digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
