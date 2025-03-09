@@ -72,6 +72,7 @@ void setup() {
   GetMemory();
   if (JarDistance == 0) {
     // New chip, flash memory not initialized
+    Serial.println("Initializing flash memory");
     RotorSize   = 20736;
     ArmUpperPos = 64000;
     ArmLowerPos = 32000;
@@ -107,6 +108,7 @@ void setup() {
   // In order to eliminate screen flicker, everything is plotted to an off-screen buffer and popped onto the screen when done
   canvas->begin();
   ScreenUpdate();
+  PopoverMessage("Calibrating Motors");
 
   // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
   InitializeArm();
@@ -118,6 +120,7 @@ void setup() {
   SwitchJars(0);
   // Lower the float arm to its down position
   SetArmPos(ArmLowerPos);
+  ScreenUpdate();
 }
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the last calibration settings from flash memory on startup
@@ -222,9 +225,11 @@ void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forw
 }
 //-----------------------------------------------------------------------------------------------
 void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
+  PopoverMessage("New Jar Selected");
   SetArmPos(ArmUpperPos);
   SwitchJars(Direction);
   SetArmPos(ArmLowerPos);
+  ScreenUpdate();
 }
 //-----------------------------------------------------------------------------------------------
 void BumpRotor(byte Direction, int Steps) {
@@ -244,6 +249,10 @@ void DrawButton(byte WhichOne) { // Draws and highlights the specified button on
 
 }
 //------------------------------------------------------------------------------------------------
+void PopoverMessage(String Msg) { // Display popover message to the user
+
+}
+//------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
   canvas->fillScreen(BLACK);
 
@@ -259,7 +268,17 @@ bool RegionPressed(int Xpos,int Ypos,int X1,int Y1,int X2,int Y2) { // Screen bu
 }
 //-----------------------------------------------------------------------------------------------
 void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
-  // If Xpos is a negative number, the user has pressed the home button, Ypos is irrelevant
+  // If Xpos is a negative number, the user has pressed the home button
+  if ((CurrentMode > 1) && (Xpos < 0)) {
+    CurrentMode = 1;
+    ActiveButton = 0; 
+    if (ArmCurrentPos != ArmLowerPos) {
+      PopoverMessage("Lowering Float Arm");
+      SetArmPos(ArmLowerPos);
+    }
+    ScreenUpdate();
+    return;
+  }
 
 }
 //------------------------------------------------------------------------------------------------
