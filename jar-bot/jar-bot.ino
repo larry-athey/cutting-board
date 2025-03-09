@@ -272,8 +272,8 @@ void loop() {
   if (digitalRead(INC_BTN) == 0) ProcessButton(1);
   // Check for Value- keypresses and handle as necessary
   if (digitalRead(DEC_BTN) == 0) ProcessButton(0);
-  // Check the float switch and advance to the next jar if necessary
-  if (digitalRead(FLOAT_SWITCH) == LOW) {
+  // If not in configuation mode, check the float switch and advance to the next jar if necessary
+  if ((CurrentMode == 1) && (digitalRead(FLOAT_SWITCH) == LOW)) {
     SetArmPos(ArmUpperPos);
     SwitchJars(1);
     SetArmPos(ArmLowerPos);
