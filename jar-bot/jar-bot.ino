@@ -215,6 +215,40 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
 
 }
 //------------------------------------------------------------------------------------------------
+void IncValue(byte WhichOne) { // Increment the value associated with the active screen button
+  /*if (WhichOne == 0) {
+    if (CurrentMode < 3) CurrentMode ++;
+  } else if (WhichOne == 2) {
+    if (UserPower < 100) UserPower ++;
+  } else if (WhichOne == 3) {
+    if (UserTemp1 < 100) UserTemp1 ++;
+  } else if (WhichOne == 4) {
+    if (UserTemp1 < 100) UserTemp1 ++;
+  } else if (WhichOne == 5) {
+    if (UserTemp2 < 100) UserTemp2 ++;
+  } else if (WhichOne == 6) {
+    if (UserTime < 24) UserTime ++;
+  }*/
+  ScreenUpdate();
+}
+//-----------------------------------------------------------------------------------------------
+void DecValue(byte WhichOne) { // Decrement the value associated with the active screen button
+  /*if (WhichOne == 0) {
+    if (CurrentMode > 1) CurrentMode --;
+  } else if (WhichOne == 2) {
+    if (UserPower > 10) UserPower --;
+  } else if (WhichOne == 3) {
+    if (UserTemp1 > 30) UserTemp1 --;
+  } else if (WhichOne == 4) {
+    if (UserTemp1 > 30) UserTemp1 --;
+  } else if (WhichOne == 5) {
+    if (UserTemp2 > 30) UserTemp2 --;
+  } else if (WhichOne == 6) {
+    if (UserTime > 1) UserTime --;
+  }*/
+  ScreenUpdate();
+}
+//-----------------------------------------------------------------------------------------------
 void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
   byte HoldCounter = 0;
 
