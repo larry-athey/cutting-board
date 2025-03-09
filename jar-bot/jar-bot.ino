@@ -192,11 +192,23 @@ void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forw
   }
   digitalWrite(STEPPER_ENABLE_1,LOW);
 }
+//-----------------------------------------------------------------------------------------------
+void DrawButton(byte WhichOne) { // Draws and highlights the specified button on the screen
+
+}
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
   canvas->fillScreen(BLACK);
 
   canvas->flush();
+}
+//-----------------------------------------------------------------------------------------------
+bool RegionPressed(int Xpos,int Ypos,int X1,int Y1,int X2,int Y2) { // Screen button press evaluator
+  if ((Xpos >= X1) && (Xpos <= X2) && (Ypos >= Y1) && (Ypos <= Y2)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 //-----------------------------------------------------------------------------------------------
 void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
