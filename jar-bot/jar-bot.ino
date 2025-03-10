@@ -105,8 +105,9 @@ void setup() {
 
   Wire.begin(SDA,SCL);
   if (Touch.init()) {
-    Serial.println("Touch screen interface initialized");
+    pinMode(TOUCH_INT,INPUT_PULLUP);
     attachInterrupt(TOUCH_INT,[] { GotInterrupt = true; },FALLING);
+    Serial.println("Touch screen interface initialized");
   } else {
     Serial.println("Touch screen interface not detected");
   }
@@ -126,19 +127,19 @@ void setup() {
   // In order to eliminate screen flicker, everything is plotted to an off-screen buffer and popped onto the screen when done
   canvas->begin();
   ScreenUpdate();
-  PopoverMessage("Calibrating Motors");
 
   // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
-  InitializeArm();
+  //PopoverMessage("Calibrating Motors");
+  //InitializeArm();
   // Raise the float arm to its upper position
-  SetArmPos(ArmUpperPos);
+  //SetArmPos(ArmUpperPos);
   // Move the rotor 45 degrees forward
-  SwitchJars(1);
+  //SwitchJars(1);
   // Move the rotor back
-  SwitchJars(0);
+  //SwitchJars(0);
   // Lower the float arm to its down position
-  SetArmPos(ArmLowerPos);
-  ScreenUpdate();
+  //SetArmPos(ArmLowerPos);
+  //ScreenUpdate();
 }
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the last calibration settings from flash memory on startup
@@ -384,18 +385,23 @@ bool RegionPressed(int Xpos,int Ypos,int X1,int Y1,int X2,int Y2) { // Screen bu
 }
 //-----------------------------------------------------------------------------------------------
 void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
+  //Serial.print("Xpos: "); Serial.println(Xpos);
+  //Serial.print("Ypos: "); Serial.println(Ypos); Serial.println("");
   // If Xpos is a negative number, the user has pressed the home button
   if ((CurrentMode > 1) && (Xpos < 0)) {
     CurrentMode = 1;
     ActiveButton = 0; 
-    if (ArmCurrentPos != ArmLowerPos) {
-      PopoverMessage("Lowering Float Arm");
-      SetArmPos(ArmLowerPos);
-    }
+    //if (ArmCurrentPos != ArmLowerPos) {
+    //  PopoverMessage("Lowering Float Arm");
+    //  SetArmPos(ArmLowerPos);
+    //}
     ScreenUpdate();
     return;
-  }
+  } else if (RegionPressed(Xpos,Ypos,PrevJarX1,PrevJarY1,PrevJarX2,PrevJarY2)) {
 
+  } else if (RegionPressed(Xpos,Ypos,NextJarX1,NextJarY1,NextJarX2,NextJarY2)) {
+
+  }
 }
 //------------------------------------------------------------------------------------------------
 void IncValue(byte WhichOne) { // Increment the value associated with the active screen button
@@ -489,6 +495,6 @@ void loop() {
     JarAdvance(1);
   }
   // Give the CPU a break between loops
-  delay(10);
+  delay(50);
 }
 //------------------------------------------------------------------------------------------------
