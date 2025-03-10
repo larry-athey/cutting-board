@@ -44,7 +44,7 @@ int ArmLowerPos = 32000;         // Float arm lower position "                  
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
 int MotorSteps = 1600;           // Stepper motor steps per revolution
-byte CurrentMode = 2;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
+byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
 byte ActiveButton = 0;           // Currently selected touch-screen button
 String Version = "1.0.1";        // Current release version of the project
 //------------------------------------------------------------------------------------------------
@@ -292,27 +292,45 @@ void DrawButton(byte WhichOne) { // Draws and highlights the specified button on
     if (ActiveButton == 3) canvas->drawRoundRect(ArmConfX1,ArmConfY1,ArmConfX2 - ArmConfX1,ArmConfY2 - RotConfY1,5,HILITE);
   } else if (WhichOne == 4) {
     canvas->fillRoundRect(Conf1_X1,Conf1_Y1,Conf1_X2 - Conf1_X1,Conf1_Y2 - Conf1_Y1,5,CONFBTN);
-
+    canvas->setCursor(Conf1_X1 + 34,Conf1_Y1 + 33);
+    canvas->print("Zero");
+    canvas->setCursor(Conf1_X1 + 31,Conf1_Y1 + 57);
+    canvas->print("Rotor");
     if (ActiveButton == 4) canvas->drawRoundRect(Conf1_X1,Conf1_Y1,Conf1_X2 - Conf1_X1,Conf1_Y2 - Conf1_Y1,5,HILITE);
   } else if (WhichOne == 5) {
     canvas->fillRoundRect(Conf2_X1,Conf2_Y1,Conf2_X2 - Conf2_X1,Conf2_Y2 - Conf2_Y1,5,CONFBTN);
-
+    canvas->setCursor(Conf2_X1 + 17,Conf2_Y1 + 33);
+    canvas->print("Measure");
+    canvas->setCursor(Conf2_X1 + 31,Conf2_Y1 + 57);
+    canvas->print("Rotor");
     if (ActiveButton == 5) canvas->drawRoundRect(Conf2_X1,Conf2_Y1,Conf2_X2 - Conf2_X1,Conf2_Y2 - Conf2_Y1,5,HILITE);
   } else if (WhichOne == 6) {
     canvas->fillRoundRect(Conf3_X1,Conf3_Y1,Conf3_X2 - Conf3_X1,Conf3_Y2 - Conf3_Y1,5,TESTBTN);
-
+    canvas->setCursor(Conf3_X1 + 32,Conf3_Y1 + 33);
+    canvas->print("Test");
+    canvas->setCursor(Conf3_X1 + 19,Conf3_Y1 + 57);
+    canvas->print("Settings");
     if (ActiveButton == 6) canvas->drawRoundRect(Conf3_X1,Conf3_Y1,Conf3_X2 - Conf3_X1,Conf3_Y2 - Conf3_Y1,5,HILITE);
   } else if (WhichOne == 7) {
     canvas->fillRoundRect(Conf1_X1,Conf1_Y1,Conf1_X2 - Conf1_X1,Conf1_Y2 - Conf1_Y1,5,CONFBTN);
-
+    canvas->setCursor(Conf1_X1 + 40,Conf1_Y1 + 33);
+    canvas->print("Set");
+    canvas->setCursor(Conf1_X1 + 31,Conf1_Y1 + 57);
+    canvas->print("Lower");
     if (ActiveButton == 7) canvas->drawRoundRect(Conf1_X1,Conf1_Y1,Conf1_X2 - Conf1_X1,Conf1_Y2 - Conf1_Y1,5,HILITE);
   } else if (WhichOne == 8) {
     canvas->fillRoundRect(Conf2_X1,Conf2_Y1,Conf2_X2 - Conf2_X1,Conf2_Y2 - Conf2_Y1,5,CONFBTN);
-
+    canvas->setCursor(Conf2_X1 + 40,Conf2_Y1 + 33);
+    canvas->print("Set");
+    canvas->setCursor(Conf2_X1 + 31,Conf2_Y1 + 57);
+    canvas->print("Upper");
     if (ActiveButton == 8) canvas->drawRoundRect(Conf2_X1,Conf2_Y1,Conf2_X2 - Conf2_X1,Conf2_Y2 - Conf2_Y1,5,HILITE);
   } else if (WhichOne == 9) {
     canvas->fillRoundRect(Conf3_X1,Conf3_Y1,Conf3_X2 - Conf3_X1,Conf3_Y2 - Conf3_Y1,5,TESTBTN);
-
+    canvas->setCursor(Conf3_X1 + 32,Conf3_Y1 + 33);
+    canvas->print("Test");
+    canvas->setCursor(Conf3_X1 + 19,Conf3_Y1 + 57);
+    canvas->print("Settings");
     if (ActiveButton == 9) canvas->drawRoundRect(Conf3_X1,Conf3_Y1,Conf3_X2 - Conf3_X1,Conf3_Y2 - Conf3_Y1,5,HILITE);
   }
 }
@@ -338,7 +356,7 @@ void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch
       canvas->setCursor(10,45);
       canvas->print("Measure: rotate turntable + 360 deg");
       canvas->setCursor(10,70);
-      canvas->print("Test: verify 45 degree jar increments");
+      canvas->print("Test: verify 45 degree jar divisions");
       DrawButton(4);
       DrawButton(5);
       DrawButton(6);
