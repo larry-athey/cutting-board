@@ -330,13 +330,25 @@ void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch
     DrawButton(3);
   } else {
     canvas->fillScreen(DARKGREY);
+    canvas->setFont(&FreeSans9pt7b);
+    canvas->setTextColor(BTNTEXT);
     if (CurrentMode == 2) {
-
+      canvas->setCursor(10,20);
+      canvas->print("Zero Rotor: use +/- to set start point");
+      canvas->setCursor(10,45);
+      canvas->print("Measure: rotate turntable + 360 deg");
+      canvas->setCursor(10,70);
+      canvas->print("Test: verify 45 degree jar increments");
       DrawButton(4);
       DrawButton(5);
       DrawButton(6);
     } else {
-
+      canvas->setCursor(10,20);
+      canvas->print("Set Lower: use +/- to set arm down");
+      canvas->setCursor(10,45);
+      canvas->print("Set Upper: use +/- to set arm raised");
+      canvas->setCursor(10,70);
+      canvas->print("Test: verify the arm up/down points");
       DrawButton(7);
       DrawButton(8);
       DrawButton(9);
