@@ -44,9 +44,26 @@ int ArmLowerPos = 32000;         // Float arm lower position "                  
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
 int MotorSteps = 1600;           // Stepper motor steps per revolution
-byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
+byte CurrentMode = 2;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
 byte ActiveButton = 0;           // Currently selected touch-screen button
 String Version = "1.0.1";        // Current release version of the project
+//------------------------------------------------------------------------------------------------
+// Home screen button coordinates (CurrentMode = 1)
+int PrevJarX1 = 0, PrevJarY1 = 0, PrevJarX2 = 158, PrevJarY2 = 84;
+int NextJarX1 = 160, NextJarY1 = 0, NextJarX2 = 319, NextJarY2 = 84;
+int RotConfX1 = 0, RotConfY1 = 86, RotConfX2 = 158, RotConfY2 = 169;
+int ArmConfX1 = 160, ArmConfY1 = 86, ArmConfX2 = 319, ArmConfY2 = 169;
+// Configuration button coordinates (CurrentMode = 2/3)
+int Conf1_X1 = 0, Conf1_Y1 = 86, Conf1_X2 = 105, Conf1_Y2 = 169;
+int Conf2_X1 = 107, Conf2_Y1 = 86, Conf2_X2 = 213, Conf2_Y2 = 169;
+int Conf3_X1 = 215, Conf3_Y1 = 86, Conf3_X2 = 319, Conf3_Y2 = 169;
+// RGB values for the button and text colors
+#define JARBTN RGB565(0,215,0)
+#define MODEBTN RGB565(50,50,230)
+#define CONFBTN RGB565(0,210,210)
+#define TESTBTN RGB565(0,215,0)
+#define HILITE RGB565(230,230,230)
+#define BTNTEXT RGB565(245,245,245)
 //------------------------------------------------------------------------------------------------
 Arduino_DataBus *bus = new Arduino_ESP32PAR8Q(7 /* DC */, 6 /* CS */, 8 /* WR */, 9 /* RD */,39 /* D0 */, 40 /* D1 */, 41 /* D2 */, 42 /* D3 */, 45 /* D4 */, 46 /* D5 */, 47 /* D6 */, 48 /* D7 */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 5 /* RST */, 0 /* rotation */, true /* IPS */, 170 /* width */, 320 /* height */, 35 /* col offset 1 */, 0 /* row offset 1 */, 35 /* col offset 2 */, 0 /* row offset 2 */);
@@ -247,7 +264,57 @@ void BumpRotor(byte Direction, int Steps) {
 }
 //------------------------------------------------------------------------------------------------
 void DrawButton(byte WhichOne) { // Draws and highlights the specified button on the screen
+  canvas->setFont(&FreeSans9pt7b);
+  canvas->setTextColor(BTNTEXT);
+  if (WhichOne == 0) {
+    canvas->fillRoundRect(PrevJarX1,PrevJarY1,PrevJarX2 - PrevJarX1,PrevJarY2 - PrevJarY1,5,JARBTN);
+    canvas->setCursor(PrevJarX1 + 28,PrevJarY1 + 45);
+    canvas->print("Previous Jar");
+    if (ActiveButton == 0) canvas->drawRoundRect(PrevJarX1,PrevJarY1,PrevJarX2 - PrevJarX1,PrevJarY2 - PrevJarY1,5,HILITE);
+  } else if (WhichOne == 1) {
+    canvas->fillRoundRect(NextJarX1,NextJarY1,NextJarX2 - NextJarX1,NextJarY2 - NextJarY1,5,JARBTN);
+    canvas->setCursor(NextJarX1 + 45,NextJarY1 + 45);
+    canvas->print("Next Jar");
+    if (ActiveButton == 1) canvas->drawRoundRect(NextJarX1,NextJarY1,NextJarX2 - NextJarX1,NextJarY2 - NextJarY1,5,HILITE);
+  } else if (WhichOne == 2) {
+    canvas->fillRoundRect(RotConfX1,RotConfY1,RotConfX2 - RotConfX1,RotConfY2 - RotConfY1,5,MODEBTN);
+    canvas->setCursor(RotConfX1 + 40,RotConfY1 + 33);
+    canvas->print("Configure");
+    canvas->setCursor(RotConfX1 + 41,RotConfY1 + 57);
+    canvas->print("Turntable");
+    if (ActiveButton == 2) canvas->drawRoundRect(RotConfX1,RotConfY1,RotConfX2 - RotConfX1,RotConfY2 - RotConfY1,5,HILITE);
+  } else if (WhichOne == 3) {
+    canvas->fillRoundRect(ArmConfX1,ArmConfY1,ArmConfX2 - ArmConfX1,ArmConfY2 - ArmConfY1,5,MODEBTN);
+    canvas->setCursor(ArmConfX1 + 41,ArmConfY1 + 33);
+    canvas->print("Configure");
+    canvas->setCursor(ArmConfX1 + 41,ArmConfY1 + 57);
+    canvas->print("Float Arm");
+    if (ActiveButton == 3) canvas->drawRoundRect(ArmConfX1,ArmConfY1,ArmConfX2 - ArmConfX1,ArmConfY2 - RotConfY1,5,HILITE);
+  } else if (WhichOne == 4) {
+    canvas->fillRoundRect(Conf1_X1,Conf1_Y1,Conf1_X2 - Conf1_X1,Conf1_Y2 - Conf1_Y1,5,CONFBTN);
 
+    if (ActiveButton == 4) canvas->drawRoundRect(Conf1_X1,Conf1_Y1,Conf1_X2 - Conf1_X1,Conf1_Y2 - Conf1_Y1,5,HILITE);
+  } else if (WhichOne == 5) {
+    canvas->fillRoundRect(Conf2_X1,Conf2_Y1,Conf2_X2 - Conf2_X1,Conf2_Y2 - Conf2_Y1,5,CONFBTN);
+
+    if (ActiveButton == 5) canvas->drawRoundRect(Conf2_X1,Conf2_Y1,Conf2_X2 - Conf2_X1,Conf2_Y2 - Conf2_Y1,5,HILITE);
+  } else if (WhichOne == 6) {
+    canvas->fillRoundRect(Conf3_X1,Conf3_Y1,Conf3_X2 - Conf3_X1,Conf3_Y2 - Conf3_Y1,5,TESTBTN);
+
+    if (ActiveButton == 6) canvas->drawRoundRect(Conf3_X1,Conf3_Y1,Conf3_X2 - Conf3_X1,Conf3_Y2 - Conf3_Y1,5,HILITE);
+  } else if (WhichOne == 7) {
+    canvas->fillRoundRect(Conf1_X1,Conf1_Y1,Conf1_X2 - Conf1_X1,Conf1_Y2 - Conf1_Y1,5,CONFBTN);
+
+    if (ActiveButton == 7) canvas->drawRoundRect(Conf1_X1,Conf1_Y1,Conf1_X2 - Conf1_X1,Conf1_Y2 - Conf1_Y1,5,HILITE);
+  } else if (WhichOne == 8) {
+    canvas->fillRoundRect(Conf2_X1,Conf2_Y1,Conf2_X2 - Conf2_X1,Conf2_Y2 - Conf2_Y1,5,CONFBTN);
+
+    if (ActiveButton == 8) canvas->drawRoundRect(Conf2_X1,Conf2_Y1,Conf2_X2 - Conf2_X1,Conf2_Y2 - Conf2_Y1,5,HILITE);
+  } else if (WhichOne == 9) {
+    canvas->fillRoundRect(Conf3_X1,Conf3_Y1,Conf3_X2 - Conf3_X1,Conf3_Y2 - Conf3_Y1,5,TESTBTN);
+
+    if (ActiveButton == 9) canvas->drawRoundRect(Conf3_X1,Conf3_Y1,Conf3_X2 - Conf3_X1,Conf3_Y2 - Conf3_Y1,5,HILITE);
+  }
 }
 //------------------------------------------------------------------------------------------------
 void PopoverMessage(String Msg) { // Display popover message to the user
@@ -255,8 +322,26 @@ void PopoverMessage(String Msg) { // Display popover message to the user
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
-  canvas->fillScreen(BLACK);
+  if (CurrentMode == 1) {
+    canvas->fillScreen(BLACK);
+    DrawButton(0);
+    DrawButton(1);
+    DrawButton(2);
+    DrawButton(3);
+  } else {
+    canvas->fillScreen(DARKGREY);
+    if (CurrentMode == 2) {
 
+      DrawButton(4);
+      DrawButton(5);
+      DrawButton(6);
+    } else {
+
+      DrawButton(7);
+      DrawButton(8);
+      DrawButton(9);
+    }
+  }
   canvas->flush();
 }
 //-----------------------------------------------------------------------------------------------
