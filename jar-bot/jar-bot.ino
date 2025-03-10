@@ -395,13 +395,14 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
     //  PopoverMessage("Lowering Float Arm");
     //  SetArmPos(ArmLowerPos);
     //}
-    ScreenUpdate();
-    return;
   } else if (RegionPressed(Xpos,Ypos,PrevJarX1,PrevJarY1,PrevJarX2,PrevJarY2)) {
-
+    //JarAdvance(0);
+    ActiveButton = 0;
   } else if (RegionPressed(Xpos,Ypos,NextJarX1,NextJarY1,NextJarX2,NextJarY2)) {
-
+    //JarAdvance(1);
+    ActiveButton = 1;
   }
+  ScreenUpdate();
 }
 //------------------------------------------------------------------------------------------------
 void IncValue(byte WhichOne) { // Increment the value associated with the active screen button
