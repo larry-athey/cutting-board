@@ -45,7 +45,7 @@ int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
 int MotorSteps = 1600;           // Stepper motor steps per revolution
 byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
-byte ActiveButton = 0;           // Currently selected touch-screen button
+byte ActiveButton = 1;           // Currently selected touch-screen button
 String Version = "1.0.1";        // Current release version of the project
 //------------------------------------------------------------------------------------------------
 // Home screen button coordinates (CurrentMode = 1)
@@ -244,6 +244,7 @@ void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forw
 }
 //-----------------------------------------------------------------------------------------------
 void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
+  ScreenUpdate();
   PopoverMessage("New Jar Selected");
   SetArmPos(ArmUpperPos);
   SwitchJars(Direction);
@@ -390,17 +391,40 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   // If Xpos is a negative number, the user has pressed the home button
   if ((CurrentMode > 1) && (Xpos < 0)) {
     CurrentMode = 1;
-    ActiveButton = 0; 
+    ActiveButton = 1; 
     //if (ArmCurrentPos != ArmLowerPos) {
     //  PopoverMessage("Lowering Float Arm");
     //  SetArmPos(ArmLowerPos);
     //}
-  } else if (RegionPressed(Xpos,Ypos,PrevJarX1,PrevJarY1,PrevJarX2,PrevJarY2)) {
-    //JarAdvance(0);
-    ActiveButton = 0;
-  } else if (RegionPressed(Xpos,Ypos,NextJarX1,NextJarY1,NextJarX2,NextJarY2)) {
-    //JarAdvance(1);
-    ActiveButton = 1;
+    ScreenUpdate();
+    return;
+  }
+  if (CurrentMode == 1) {
+    if (RegionPressed(Xpos,Ypos,PrevJarX1,PrevJarY1,PrevJarX2,PrevJarY2)) {
+      ActiveButton = 0;
+      //JarAdvance(0);
+    } else if (RegionPressed(Xpos,Ypos,NextJarX1,NextJarY1,NextJarX2,NextJarY2)) {
+      ActiveButton = 1;
+      //JarAdvance(1);
+    } else if (RegionPressed(Xpos,Ypos,RotConfX1,RotConfY1,RotConfX2,RotConfY2)) {
+      ActiveButton = 2;
+      ScreenUpdate();
+      PopoverMessage("Raising Float Arm");
+      //SetArmPos(ArmUpperPos);
+      ActiveButton = 6;
+      CurrentMode = 2;
+    } else if (RegionPressed(Xpos,Ypos,ArmConfX1,ArmConfY1,ArmConfX2,ArmConfY2)) {
+      ActiveButton = 3;
+      ScreenUpdate();
+      PopoverMessage("Raising Float Arm");
+      //SetArmPos(ArmUpperPos);
+      ActiveButton = 9;
+      CurrentMode = 3;
+    }
+  } else if (CurrentMode == 2) {
+
+  } else if (CurrentMode == 3) {
+
   }
   ScreenUpdate();
 }
@@ -492,7 +516,6 @@ void loop() {
   // If not in configuation mode, check the float switch and advance to the next jar if necessary
   if ((CurrentMode == 1) && (digitalRead(FLOAT_SWITCH) == LOW)) {
     ActiveButton = 1;
-    ScreenUpdate();
     JarAdvance(1);
   }
   // Give the CPU a break between loops
