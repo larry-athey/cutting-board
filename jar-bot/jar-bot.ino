@@ -422,9 +422,21 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
       CurrentMode = 3;
     }
   } else if (CurrentMode == 2) {
-
+    if (RegionPressed(Xpos,Ypos,Conf1_X1,Conf1_Y1,Conf1_X2,Conf1_Y2)) {
+      ActiveButton = 4;
+    } else if (RegionPressed(Xpos,Ypos,Conf2_X1,Conf2_Y1,Conf2_X2,Conf2_Y2)) {
+      ActiveButton = 5;
+    } else if (RegionPressed(Xpos,Ypos,Conf3_X1,Conf3_Y1,Conf3_X2,Conf3_Y2)) {
+      ActiveButton = 6;
+    }
   } else if (CurrentMode == 3) {
-
+    if (RegionPressed(Xpos,Ypos,Conf1_X1,Conf1_Y1,Conf1_X2,Conf1_Y2)) {
+      ActiveButton = 7;
+    } else if (RegionPressed(Xpos,Ypos,Conf2_X1,Conf2_Y1,Conf2_X2,Conf2_Y2)) {
+      ActiveButton = 8;
+    } else if (RegionPressed(Xpos,Ypos,Conf3_X1,Conf3_Y1,Conf3_X2,Conf3_Y2)) {
+      ActiveButton = 9;
+    }
   }
   ScreenUpdate();
 }
