@@ -343,6 +343,14 @@ void PopoverMessage(String Msg) { // Display popover message to the user
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
   if (CurrentMode == 1) {
+    // Debugging information
+    Serial.print("RotorSize: "); Serial.println(RotorSize);
+    Serial.print("JarDistance: "); Serial.println(JarDistance);
+    Serial.print("ArmUpperPos: "); Serial.println(ArmUpperPos);
+    Serial.print("ArmLowerPos: "); Serial.println(ArmLowerPos);
+    Serial.print("ArmCurrentPos: "); Serial.println(ArmCurrentPos);
+    Serial.println();
+
     canvas->fillScreen(BLACK);
     DrawButton(0);
     DrawButton(1);
