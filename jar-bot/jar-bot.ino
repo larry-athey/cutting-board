@@ -444,6 +444,10 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   } else if (CurrentMode == 2) {
     if (RegionPressed(Xpos,Ypos,Conf1_X1,Conf1_Y1,Conf1_X2,Conf1_Y2)) {
       ActiveButton = 4;
+      RotorSize = 0;
+      ScreenUpdate();
+      PopoverMessage("Turntable Size Zeroed");
+      delay(2000);
     } else if (RegionPressed(Xpos,Ypos,Conf2_X1,Conf2_Y1,Conf2_X2,Conf2_Y2)) {
       ActiveButton = 5;
     } else if (RegionPressed(Xpos,Ypos,Conf3_X1,Conf3_Y1,Conf3_X2,Conf3_Y2)) {
@@ -456,20 +460,25 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   } else if (CurrentMode == 3) {
     if (RegionPressed(Xpos,Ypos,Conf1_X1,Conf1_Y1,Conf1_X2,Conf1_Y2)) {
       ActiveButton = 7;
-      RotorSize = 0;
-      ScreenUpdate();
-      PopoverMessage("Turntable Size Zeroed");
-      delay(2000);
-    } else if (RegionPressed(Xpos,Ypos,Conf2_X1,Conf2_Y1,Conf2_X2,Conf2_Y2)) {
-      ActiveButton = 8;
       ScreenUpdate();
       PopoverMessage("Move To Lower Position");
       SetArmPos(ArmLowerPos);
-    } else if (RegionPressed(Xpos,Ypos,Conf3_X1,Conf3_Y1,Conf3_X2,Conf3_Y2)) {
-      ActiveButton = 9;
+    } else if (RegionPressed(Xpos,Ypos,Conf2_X1,Conf2_Y1,Conf2_X2,Conf2_Y2)) {
+      ActiveButton = 8;
       ScreenUpdate();
       PopoverMessage("Move To Upper Position");
       SetArmPos(ArmUpperPos);
+    } else if (RegionPressed(Xpos,Ypos,Conf3_X1,Conf3_Y1,Conf3_X2,Conf3_Y2)) {
+      ActiveButton = 9;
+      if (ArmCurrentPos == ArmLowerPos) {
+        ScreenUpdate();
+        PopoverMessage("Upper Position Test");
+        SetArmPos(ArmUpperPos);
+      } else {
+        ScreenUpdate();
+        PopoverMessage("Lower Position Test");
+        SetArmPos(ArmLowerPos);
+      }
     }
   }
   ScreenUpdate();
