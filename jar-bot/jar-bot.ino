@@ -208,6 +208,7 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
 }
 //------------------------------------------------------------------------------------------------
 void BumpArm(byte Direction, int Steps) {
+  if ((Direction == 0) && (digitalRead(ARM_ZERO_SWITCH) == LOW)) return;
   digitalWrite(STEPPER_DIRECTION,Direction);
   digitalWrite(STEPPER_ENABLE_2,HIGH);
   delay(10);
@@ -338,7 +339,18 @@ void DrawButton(byte WhichOne) { // Draws and highlights the specified button on
 }
 //------------------------------------------------------------------------------------------------
 void PopoverMessage(String Msg) { // Display popover message to the user
+  int16_t nX = 0, nY = 0, TextX;
+  uint16_t nWidth = 0, nHeight = 0;
 
+  canvas->setFont(&FreeSans9pt7b);
+  canvas->setTextColor(BLACK);
+  canvas->getTextBounds(Msg,0,0,&nX,&nY,&nWidth,&nHeight);
+  TextX = round(nWidth / 2);
+  canvas->fillRoundRect(160 - TextX - 12,60,nWidth + 26,40,5,WHITE);
+  canvas->drawRoundRect(160 - TextX - 12,60,nWidth + 26,40,5,BLACK);
+  canvas->setCursor(160 - TextX,85);
+  canvas->print(Msg);
+  canvas->flush();
 }
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
@@ -394,8 +406,11 @@ bool RegionPressed(int Xpos,int Ypos,int X1,int Y1,int X2,int Y2) { // Screen bu
 }
 //-----------------------------------------------------------------------------------------------
 void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
+  // Debugging information
   //Serial.print("Xpos: "); Serial.println(Xpos);
-  //Serial.print("Ypos: "); Serial.println(Ypos); Serial.println("");
+  //Serial.print("Ypos: "); Serial.println(Ypos);
+  //Serial.println();
+
   // If Xpos is a negative number, the user has pressed the home button
   if ((CurrentMode > 1) && (Xpos < 0)) {
     CurrentMode = 1;
@@ -404,6 +419,7 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
     //  PopoverMessage("Lowering Float Arm");
     //  SetArmPos(ArmLowerPos);
     //}
+    SetMemory();
     ScreenUpdate();
     return;
   }
@@ -484,7 +500,7 @@ void DecValue(byte WhichOne) { // Decrement the value associated with the active
 }
 //-----------------------------------------------------------------------------------------------
 void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
-  byte HoldCounter = 0;
+  int HoldCounter = 0;
 
   if (WhichOne == 1) {
     // Increment active screen button value by 1
@@ -492,11 +508,8 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
     while (digitalRead(INC_BTN) == 0) {
       delay(10);
       HoldCounter ++;
-      if (HoldCounter == 150) { // User is intentionally holding the + button
-        while (digitalRead(INC_BTN) == 0) {
-          IncValue(ActiveButton);
-          delay(250);
-        }
+      if ((HoldCounter == 150) && (CurrentMode > 1)) { // User is intentionally holding the + button
+        while (digitalRead(INC_BTN) == 0) IncValue(ActiveButton);
       }
     }
   } else {
@@ -505,15 +518,11 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
     while (digitalRead(DEC_BTN) == 0) {
       delay(10);
       HoldCounter ++;
-      if (HoldCounter == 150) { // User is intentionally holding the - button
-        while (digitalRead(DEC_BTN) == 0) {
-          DecValue(ActiveButton);
-          delay(250);
-        }
+      if ((HoldCounter == 150) && (CurrentMode > 1)) { // User is intentionally holding the - button
+        while (digitalRead(DEC_BTN) == 0) DecValue(ActiveButton);
       }
     }
   }
-  if (CurrentMode > 1) SetMemory();
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
