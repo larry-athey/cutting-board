@@ -551,6 +551,14 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
       }
     }
   }
+  // Debugging information
+  if (ActiveButton == 5) {
+    Serial.print("RotorSize: "); Serial.println(RotorSize);
+  } else if (ActiveButton == 7) {
+    Serial.print("ArmLowerPos: "); Serial.println(ArmLowerPos);
+  } else if (ActiveButton == 8) {
+    Serial.print("ArmUpperPos: "); Serial.println(ArmUpperPos);
+  }
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
