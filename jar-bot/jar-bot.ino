@@ -489,10 +489,8 @@ void IncValue() { // Increment the value associated with the current mode and ac
     Serial.println("Mode 1 Rotor Bump +");
     BumpRotor(1,4);
   } else if (CurrentMode == 2) {
-    if (ActiveButton == 4) {
-      BumpRotor(1,4);
-    } else if (ActiveButton == 5) {
-      BumpRotor(1,4);
+    if (ActiveButton < 6) BumpArm(1,4);
+    if (ActiveButton == 5) {
       RotorSize += 4;
     }
   } else if (CurrentMode == 3) {
@@ -510,10 +508,8 @@ void DecValue() { // Decrement the value associated with the current mode and ac
     Serial.println("Mode 1 Rotor Bump -");
     BumpRotor(0,4);
   } else if (CurrentMode == 2) {
-    if (ActiveButton == 4) {
-      BumpRotor(0,4);
-    } else if (ActiveButton == 5) {
-      BumpRotor(0,4);
+    if (ActiveButton < 6) BumpArm(0,4);
+    if (ActiveButton == 5) {
       RotorSize -= 4;
       if (RotorSize < 0) RotorSize = 0;
     }
