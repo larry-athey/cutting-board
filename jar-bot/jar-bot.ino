@@ -426,10 +426,12 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   if (CurrentMode == 1) {
     if (RegionPressed(Xpos,Ypos,PrevJarX1,PrevJarY1,PrevJarX2,PrevJarY2)) {
       ActiveButton = 0;
-      //JarAdvance(0);
+      Serial.println("Mode 1 Jar Advance -");
+      JarAdvance(0);
     } else if (RegionPressed(Xpos,Ypos,NextJarX1,NextJarY1,NextJarX2,NextJarY2)) {
       ActiveButton = 1;
-      //JarAdvance(1);
+      Serial.println("Mode 1 Jar Advance +");
+      JarAdvance(1);
     } else if (RegionPressed(Xpos,Ypos,RotConfX1,RotConfY1,RotConfX2,RotConfY2)) {
       ActiveButton = 2;
       ScreenUpdate();
@@ -452,6 +454,10 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
       ActiveButton = 5;
     } else if (RegionPressed(Xpos,Ypos,Conf3_X1,Conf3_Y1,Conf3_X2,Conf3_Y2)) {
       ActiveButton = 6;
+      ScreenUpdate();
+      PopoverMessage("Advancing Jar Position");
+      Serial.println("Mode 3 Jar Advance +");
+      SwitchJars(1);
     }
   } else if (CurrentMode == 3) {
     if (RegionPressed(Xpos,Ypos,Conf1_X1,Conf1_Y1,Conf1_X2,Conf1_Y2)) {
@@ -465,38 +471,26 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   ScreenUpdate();
 }
 //------------------------------------------------------------------------------------------------
-void IncValue(byte WhichOne) { // Increment the value associated with the active screen button
-  /*if (WhichOne == 0) {
-    if (CurrentMode < 3) CurrentMode ++;
-  } else if (WhichOne == 2) {
-    if (UserPower < 100) UserPower ++;
-  } else if (WhichOne == 3) {
-    if (UserTemp1 < 100) UserTemp1 ++;
-  } else if (WhichOne == 4) {
-    if (UserTemp1 < 100) UserTemp1 ++;
-  } else if (WhichOne == 5) {
-    if (UserTemp2 < 100) UserTemp2 ++;
-  } else if (WhichOne == 6) {
-    if (UserTime < 24) UserTime ++;
-  }*/
-  ScreenUpdate();
+void IncValue() { // Increment the value associated with the current mode and active screen button
+  if (CurrentMode == 1) {
+    Serial.println("Mode 1 Rotor Bump +");
+    BumpRotor(1,4);
+  } else if (CurrentMode == 2) {
+
+  } else if (CurrentMode == 3) {
+
+  }
 }
 //-----------------------------------------------------------------------------------------------
-void DecValue(byte WhichOne) { // Decrement the value associated with the active screen button
-  /*if (WhichOne == 0) {
-    if (CurrentMode > 1) CurrentMode --;
-  } else if (WhichOne == 2) {
-    if (UserPower > 10) UserPower --;
-  } else if (WhichOne == 3) {
-    if (UserTemp1 > 30) UserTemp1 --;
-  } else if (WhichOne == 4) {
-    if (UserTemp1 > 30) UserTemp1 --;
-  } else if (WhichOne == 5) {
-    if (UserTemp2 > 30) UserTemp2 --;
-  } else if (WhichOne == 6) {
-    if (UserTime > 1) UserTime --;
-  }*/
-  ScreenUpdate();
+void DecValue() { // Decrement the value associated with the current mode and active screen button
+  if (CurrentMode == 1) {
+    Serial.println("Mode 1 Rotor Bump -");
+    BumpRotor(0,4);
+  } else if (CurrentMode == 2) {
+
+  } else if (CurrentMode == 3) {
+
+  }
 }
 //-----------------------------------------------------------------------------------------------
 void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
@@ -504,22 +498,22 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
 
   if (WhichOne == 1) {
     // Increment active screen button value by 1
-    IncValue(ActiveButton);
+    IncValue();
     while (digitalRead(INC_BTN) == 0) {
       delay(10);
       HoldCounter ++;
       if ((HoldCounter == 150) && (CurrentMode > 1)) { // User is intentionally holding the + button
-        while (digitalRead(INC_BTN) == 0) IncValue(ActiveButton);
+        while (digitalRead(INC_BTN) == 0) IncValue();
       }
     }
   } else {
     // Decrement active screen button value by 1
-    DecValue(ActiveButton);
+    DecValue();
     while (digitalRead(DEC_BTN) == 0) {
       delay(10);
       HoldCounter ++;
       if ((HoldCounter == 150) && (CurrentMode > 1)) { // User is intentionally holding the - button
-        while (digitalRead(DEC_BTN) == 0) DecValue(ActiveButton);
+        while (digitalRead(DEC_BTN) == 0) DecValue();
       }
     }
   }
