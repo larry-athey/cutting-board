@@ -129,14 +129,8 @@ void setup() {
   ScreenUpdate();
 
   // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
-  //PopoverMessage("Calibrating Motors");
+  //PopoverMessage("Calibrating Float Arm");
   //InitializeArm();
-  // Raise the float arm to its upper position
-  //SetArmPos(ArmUpperPos);
-  // Move the rotor 45 degrees forward
-  //SwitchJars(1);
-  // Move the rotor back
-  //SwitchJars(0);
   // Lower the float arm to its down position
   //SetArmPos(ArmLowerPos);
   //ScreenUpdate();
