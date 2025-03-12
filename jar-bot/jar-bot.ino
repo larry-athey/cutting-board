@@ -456,10 +456,20 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   } else if (CurrentMode == 3) {
     if (RegionPressed(Xpos,Ypos,Conf1_X1,Conf1_Y1,Conf1_X2,Conf1_Y2)) {
       ActiveButton = 7;
+      RotorSize = 0;
+      ScreenUpdate();
+      PopoverMessage("Turntable Size Zeroed");
+      delay(2000);
     } else if (RegionPressed(Xpos,Ypos,Conf2_X1,Conf2_Y1,Conf2_X2,Conf2_Y2)) {
       ActiveButton = 8;
+      ScreenUpdate();
+      PopoverMessage("Move To Lower Position");
+      SetArmPos(ArmLowerPos);
     } else if (RegionPressed(Xpos,Ypos,Conf3_X1,Conf3_Y1,Conf3_X2,Conf3_Y2)) {
       ActiveButton = 9;
+      ScreenUpdate();
+      PopoverMessage("Move To Upper Position");
+      SetArmPos(ArmUpperPos);
     }
   }
   ScreenUpdate();
@@ -470,9 +480,19 @@ void IncValue() { // Increment the value associated with the current mode and ac
     Serial.println("Mode 1 Rotor Bump +");
     BumpRotor(1,4);
   } else if (CurrentMode == 2) {
-
+    if (ActiveButton == 4) {
+      BumpRotor(1,4);
+    } else if (ActiveButton == 5) {
+      BumpRotor(1,4);
+      RotorSize += 4;
+    }
   } else if (CurrentMode == 3) {
-
+    if (ActiveButton < 9) BumpArm(1,MotorSteps);
+    if (ActiveButton == 7) {
+      ArmLowerPos = ArmCurrentPos;
+    } else if (ActiveButton == 8) {
+      ArmUpperPos = ArmCurrentPos;
+    }
   }
 }
 //-----------------------------------------------------------------------------------------------
@@ -481,9 +501,20 @@ void DecValue() { // Decrement the value associated with the current mode and ac
     Serial.println("Mode 1 Rotor Bump -");
     BumpRotor(0,4);
   } else if (CurrentMode == 2) {
-
+    if (ActiveButton == 4) {
+      BumpRotor(0,4);
+    } else if (ActiveButton == 5) {
+      BumpRotor(0,4);
+      RotorSize -= 4;
+      if (RotorSize < 0) RotorSize = 0;
+    }
   } else if (CurrentMode == 3) {
-
+    if (ActiveButton < 9) BumpArm(0,MotorSteps);
+    if (ActiveButton == 7) {
+      ArmLowerPos = ArmCurrentPos;
+    } else if (ActiveButton == 8) {
+      ArmUpperPos = ArmCurrentPos;
+    }
   }
 }
 //-----------------------------------------------------------------------------------------------
