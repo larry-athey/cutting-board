@@ -10,7 +10,8 @@
 // Blue  → 2A
 // Red   → 2B
 //
-// 1/8 step (1600 steps per revolution) M0-High, M1-High, M2-Low
+// 1/4 step (800 steps per revolution) M0 = 1 (High), M1 = 0 (Low), M2 = 0 (Low)
+// 1/8 step (1600 steps per revolution) M0 = 0 (Low), M1 = 1 (High), M2 = 0 (Low)
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
@@ -39,11 +40,12 @@
 bool GotInterrupt = false;       // True if touch input has been detected on the screen
 int RotorSize = 20736;           // Rotor (turntable) circumference in motor steps
 int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
-int ArmUpperPos = 64000;         // Float arm upper position (1600 steps per mm of vertical lift)
-int ArmLowerPos = 32000;         // Float arm lower position "                                  "
+int ArmUpperPos = 32000;         // Float arm upper position (800 steps per mm of vertical lift)
+int ArmLowerPos = 16000;         // Float arm lower position "                                  "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
-int MotorSteps = 1600;           // Stepper motor steps per revolution
+int RotorSteps = 1600;           // Rotor stepper motor steps per revolution
+int ArmSteps = 800;              // Float arm stepper motor steps per revolution
 byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
 byte ActiveButton = 1;           // Currently selected touch-screen button
 String Version = "1.0.1";        // Current release version of the project
@@ -92,8 +94,8 @@ void setup() {
     // New chip, flash memory not initialized
     Serial.println("Initializing flash memory");
     RotorSize   = 20736;
-    ArmUpperPos = 64000;
-    ArmLowerPos = 32000;
+    ArmUpperPos = 32000;
+    ArmLowerPos = 16000;
     SetMemory();
   }
 
@@ -158,7 +160,7 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
   digitalWrite(STEPPER_ENABLE_2,HIGH);
   delay(10);
   digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
-  for (int x = 1; x <= (MotorSteps * 5); x ++) { // Raise the arm 5 mm (threaded rod with 1 mm pitch)
+  for (int x = 1; x <= (ArmSteps * 5); x ++) { // Raise the arm 5 mm (threaded rod with 1 mm pitch)
     digitalWrite(STEPPER_PULSE,HIGH);
     delayMicroseconds(StepperPulse);
     digitalWrite(STEPPER_PULSE,LOW);
@@ -199,6 +201,7 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
     }
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
+  if (ArmCurrentPos > 0) ArmCurrentPos = Position;
 }
 //------------------------------------------------------------------------------------------------
 void BumpArm(byte Direction, int Steps) {
@@ -489,12 +492,12 @@ void IncValue() { // Increment the value associated with the current mode and ac
     Serial.println("Mode 1 Rotor Bump +");
     BumpRotor(1,4);
   } else if (CurrentMode == 2) {
-    if (ActiveButton < 6) BumpArm(1,4);
+    if (ActiveButton < 6) BumpRotor(1,4);
     if (ActiveButton == 5) {
       RotorSize += 4;
     }
   } else if (CurrentMode == 3) {
-    if (ActiveButton < 9) BumpArm(1,MotorSteps);
+    if (ActiveButton < 9) BumpArm(1,ArmSteps);
     if (ActiveButton == 7) {
       ArmLowerPos = ArmCurrentPos;
     } else if (ActiveButton == 8) {
@@ -508,13 +511,13 @@ void DecValue() { // Decrement the value associated with the current mode and ac
     Serial.println("Mode 1 Rotor Bump -");
     BumpRotor(0,4);
   } else if (CurrentMode == 2) {
-    if (ActiveButton < 6) BumpArm(0,4);
+    if (ActiveButton < 6) BumpRotor(0,4);
     if (ActiveButton == 5) {
       RotorSize -= 4;
       if (RotorSize < 0) RotorSize = 0;
     }
   } else if (CurrentMode == 3) {
-    if (ActiveButton < 9) BumpArm(0,MotorSteps);
+    if (ActiveButton < 9) BumpArm(0,ArmSteps);
     if (ActiveButton == 7) {
       ArmLowerPos = ArmCurrentPos;
     } else if (ActiveButton == 8) {
