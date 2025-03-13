@@ -244,10 +244,12 @@ void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forw
 void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
   ScreenUpdate();
   PopoverMessage("New Jar Selected");
+  Serial.println("Raising Float Arm");
   SetArmPos(ArmUpperPos);
+  Serial.println("Advancing Jar Position");
   SwitchJars(Direction);
+  Serial.println("Lowering Float Arm");
   SetArmPos(ArmLowerPos);
-  ScreenUpdate();
 }
 //-----------------------------------------------------------------------------------------------
 void BumpRotor(byte Direction, int Steps) {
