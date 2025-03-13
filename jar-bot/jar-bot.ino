@@ -178,6 +178,7 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
 //------------------------------------------------------------------------------------------------
 void SetArmPos(int Position) { // Move the float arm up or down to a specific position
   int Steps;
+  bool Limit = false;
 
   if (Position > ArmCurrentPos) {
     digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
@@ -197,11 +198,12 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
     delayMicroseconds(StepperPulse);
     if (digitalRead(ARM_ZERO_SWITCH) == LOW) {
       ArmCurrentPos = 0;
+      Limit = true;
       break;
     }
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
-  if (ArmCurrentPos > 0) ArmCurrentPos = Position;
+  if (! Limit) ArmCurrentPos = Position;
 }
 //------------------------------------------------------------------------------------------------
 void BumpArm(byte Direction, int Steps) {
@@ -243,6 +245,11 @@ void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forw
 //-----------------------------------------------------------------------------------------------
 void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
   ScreenUpdate();
+  if (Direction == 1) {
+    Serial.println("Mode 1 Jar Advance +");
+  } else {
+    Serial.println("Mode 1 Jar Advance -");
+  }
   PopoverMessage("New Jar Selected");
   Serial.println("Raising Float Arm");
   SetArmPos(ArmUpperPos);
@@ -355,6 +362,7 @@ void PopoverMessage(String Msg) { // Display popover message to the user
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
   if (CurrentMode == 1) {
     // Debugging information
+    Serial.println();
     Serial.print("RotorSize: "); Serial.println(RotorSize);
     Serial.print("JarDistance: "); Serial.println(JarDistance);
     Serial.print("ArmUpperPos: "); Serial.println(ArmUpperPos);
@@ -425,11 +433,9 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   if (CurrentMode == 1) {
     if (RegionPressed(Xpos,Ypos,PrevJarX1,PrevJarY1,PrevJarX2,PrevJarY2)) {
       ActiveButton = 0;
-      Serial.println("Mode 1 Jar Advance -");
       JarAdvance(0);
     } else if (RegionPressed(Xpos,Ypos,NextJarX1,NextJarY1,NextJarX2,NextJarY2)) {
       ActiveButton = 1;
-      Serial.println("Mode 1 Jar Advance +");
       JarAdvance(1);
     } else if (RegionPressed(Xpos,Ypos,RotConfX1,RotConfY1,RotConfX2,RotConfY2)) {
       ActiveButton = 2;
