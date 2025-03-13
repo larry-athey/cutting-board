@@ -10,8 +10,8 @@
 // Blue  → 2A
 // Red   → 2B
 //
-// 1/4 step (800 steps per revolution) M0 = 1 (High), M1 = 0 (Low), M2 = 0 (Low)
-// 1/8 step (1600 steps per revolution) M0 = 0 (Low), M1 = 1 (High), M2 = 0 (Low)
+// 1/4 step (800 steps per revolution) M0 = 0 (Low), M1 = 1 (High), M2 = 0 (Low)
+// 1/8 step (1600 steps per revolution) M0 = 1 (High), M1 = 1 (High), M2 = 0 (Low)
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
