@@ -10,6 +10,7 @@
 // Blue  → 2A
 // Red   → 2B
 //
+// DRV8825 microstepping logic pin settings
 // 1/4 step (800 steps per revolution) M0 = 0 (Low), M1 = 1 (High), M2 = 0 (Low)
 // 1/8 step (1600 steps per revolution) M0 = 1 (High), M1 = 1 (High), M2 = 0 (Low)
 //------------------------------------------------------------------------------------------------
