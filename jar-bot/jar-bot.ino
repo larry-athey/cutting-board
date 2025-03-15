@@ -3,16 +3,6 @@
 //
 // The following lazy susan turntable was used during development https://www.amazon.com/dp/B0C65XVDGS
 // This is advertised as 14", but measures 350 mm in diameter.
-//
-// Nema 17 motor to DRV8825 connections
-// Black → 1A
-// Green → 1B
-// Blue  → 2A
-// Red   → 2B
-//
-// DRV8825 microstepping logic pin settings
-// 1/4 step (800 steps per revolution) M0 = 0 (Low), M1 = 1 (High), M2 = 0 (Low)
-// 1/8 step (1600 steps per revolution) M0 = 1 (High), M1 = 1 (High), M2 = 0 (Low)
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
@@ -44,7 +34,8 @@ int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps 
 int ArmUpperPos = 32000;         // Float arm upper position (800 steps per mm of vertical lift)
 int ArmLowerPos = 16000;         // Float arm lower position "                                  "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
-int StepperPulse = 965;          // Stepper motor pulse width per on/off state (microseconds)
+int ArmPulse = 500;              // Float Arm stepper pulse width per on/off state (microseconds)
+int RotorPulse = 965;            // Rotor stepper pulse width per on/off state (microseconds)
 int RotorSteps = 1600;           // Rotor stepper motor steps per revolution
 int ArmSteps = 800;              // Float arm stepper motor steps per revolution
 byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
@@ -160,19 +151,19 @@ void SetMemory() { // Update flash memory with the current calibration settings
 void InitializeArm() { // Set the float arm to it's lower limit position to locate absolute zero
   digitalWrite(STEPPER_ENABLE_2,HIGH);
   delay(10);
-  digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
+  digitalWrite(STEPPER_DIRECTION,LOW);
   for (int x = 1; x <= (ArmSteps * 5); x ++) { // Raise the arm 5 mm (threaded rod with 1 mm pitch)
     digitalWrite(STEPPER_PULSE,HIGH);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(ArmPulse);
     digitalWrite(STEPPER_PULSE,LOW);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(RotorPulse);
   }
-  digitalWrite(STEPPER_DIRECTION,LOW); // Counter-Clockwise
+  digitalWrite(STEPPER_DIRECTION,HIGH);
   while(digitalRead(ARM_ZERO_SWITCH) == HIGH) { // Lower the arm to find zero
     digitalWrite(STEPPER_PULSE,HIGH);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(ArmPulse);
     digitalWrite(STEPPER_PULSE,LOW);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(RotorPulse);
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
 }
@@ -182,10 +173,10 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
   bool Limit = false;
 
   if (Position > ArmCurrentPos) {
-    digitalWrite(STEPPER_DIRECTION,HIGH); // Clockwise
+    digitalWrite(STEPPER_DIRECTION,LOW);
     Steps = Position - ArmCurrentPos;
   } else if (Position < ArmCurrentPos) {
-    digitalWrite(STEPPER_DIRECTION,LOW); // Counter-Clockwise
+    digitalWrite(STEPPER_DIRECTION,HIGH);
     Steps = ArmCurrentPos - Position;
   } else {
     return;
@@ -194,9 +185,9 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
   delay(10);
   for (int x = 1; x <= Steps; x ++) {
     digitalWrite(STEPPER_PULSE,HIGH);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(ArmPulse);
     digitalWrite(STEPPER_PULSE,LOW);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(ArmPulse);
     if (digitalRead(ARM_ZERO_SWITCH) == LOW) {
       ArmCurrentPos = 0;
       Limit = true;
@@ -209,14 +200,15 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
 //------------------------------------------------------------------------------------------------
 void BumpArm(byte Direction, int Steps) {
   if ((Direction == 0) && (digitalRead(ARM_ZERO_SWITCH) == LOW)) return;
+  Direction = ! Direction;
   digitalWrite(STEPPER_DIRECTION,Direction);
   digitalWrite(STEPPER_ENABLE_2,HIGH);
   delay(10);
   for (int x = 1; x <= Steps; x ++) {
     digitalWrite(STEPPER_PULSE,HIGH);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(ArmPulse);
     digitalWrite(STEPPER_PULSE,LOW);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(ArmPulse);
     if (digitalRead(ARM_ZERO_SWITCH) == LOW) {
       ArmCurrentPos = 0;
       break;
@@ -237,9 +229,9 @@ void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forw
   delay(10);
   for (int x = 1; x <= JarDistance; x ++) {
     digitalWrite(STEPPER_PULSE,HIGH);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(RotorPulse);
     digitalWrite(STEPPER_PULSE,LOW);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(RotorPulse);
   }
   digitalWrite(STEPPER_ENABLE_1,LOW);
 }
@@ -266,9 +258,9 @@ void BumpRotor(byte Direction, int Steps) {
   delay(10);
   for (int x = 1; x <= Steps; x ++) {
     digitalWrite(STEPPER_PULSE,HIGH);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(RotorPulse);
     digitalWrite(STEPPER_PULSE,LOW);
-    delayMicroseconds(StepperPulse);
+    delayMicroseconds(RotorPulse);
   }
   digitalWrite(STEPPER_ENABLE_1,LOW);
 }
