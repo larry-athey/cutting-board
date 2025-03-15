@@ -491,11 +491,11 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
 void IncValue() { // Increment the value associated with the current mode and active screen button
   if (CurrentMode == 1) {
     Serial.println("Mode 1 Rotor Bump +");
-    BumpRotor(1,4);
+    BumpRotor(1,40);
   } else if (CurrentMode == 2) {
-    if (ActiveButton < 6) BumpRotor(1,4);
+    if (ActiveButton < 6) BumpRotor(1,40);
     if (ActiveButton == 5) {
-      RotorSize += 4;
+      RotorSize += 40;
     }
   } else if (CurrentMode == 3) {
     if (ActiveButton < 9) BumpArm(1,ArmSteps);
@@ -510,11 +510,11 @@ void IncValue() { // Increment the value associated with the current mode and ac
 void DecValue() { // Decrement the value associated with the current mode and active screen button
   if (CurrentMode == 1) {
     Serial.println("Mode 1 Rotor Bump -");
-    BumpRotor(0,4);
+    BumpRotor(0,40);
   } else if (CurrentMode == 2) {
-    if (ActiveButton < 6) BumpRotor(0,4);
+    if (ActiveButton < 6) BumpRotor(0,40);
     if (ActiveButton == 5) {
-      RotorSize -= 4;
+      RotorSize -= 40;
       if (RotorSize < 0) RotorSize = 0;
     }
   } else if (CurrentMode == 3) {
