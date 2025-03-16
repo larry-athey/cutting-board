@@ -114,6 +114,8 @@ void setup() {
   ledcSetup(0,2000,8);
   ledcAttachPin(SCREEN_BACKLIGHT,0);
   ledcWrite(0,255); // Screen brightness (0-255)
+  pinMode(INC_BTN,INPUT_PULLUP);
+  pinMode(DEC_BTN,INPUT_PULLUP);
 
   // Initialize the graphics library and blank the screen
   gfx->begin();
