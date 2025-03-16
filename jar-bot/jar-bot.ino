@@ -611,7 +611,7 @@ void loop() {
       Xpos = 320 - Point.y; // Touch.setRotation() doesn't work for some reason
       Ypos = Point.x;       // "                                              "
       ProcessTouch(Xpos,Ypos);
-      while (Touch.read()) delay(10);
+      delay(1000);
     }
     GotInterrupt = false;
   }
