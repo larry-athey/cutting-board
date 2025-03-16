@@ -129,7 +129,7 @@ void setup() {
   // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
   //PopoverMessage("Calibrating Float Arm");
   //InitializeArm();
-  // Lower the float arm to its down position
+  // Move the float arm to its down position
   //SetArmPos(ArmLowerPos);
   //ScreenUpdate();
 }
@@ -417,11 +417,6 @@ bool RegionPressed(int Xpos,int Ypos,int X1,int Y1,int X2,int Y2) { // Screen bu
 }
 //-----------------------------------------------------------------------------------------------
 void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
-  // Debugging information
-  //Serial.print("Xpos: "); Serial.println(Xpos);
-  //Serial.print("Ypos: "); Serial.println(Ypos);
-  //Serial.println();
-
   // If Xpos is a negative number, the user has pressed the home button
   if ((CurrentMode > 1) && (Xpos < 0)) {
     CurrentMode = 1;
@@ -450,9 +445,6 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
       CurrentMode = 2;
     } else if (RegionPressed(Xpos,Ypos,ArmConfX1,ArmConfY1,ArmConfX2,ArmConfY2)) {
       ActiveButton = 3;
-      ScreenUpdate();
-      PopoverMessage("Raising Float Arm");
-      SetArmPos(ArmUpperPos);
       ActiveButton = 9;
       CurrentMode = 3;
     }
