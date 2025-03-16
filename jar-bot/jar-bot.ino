@@ -3,6 +3,8 @@
 //
 // The following lazy susan turntable was used during development https://www.amazon.com/dp/B0C65XVDGS
 // This is advertised as 14", but measures 350 mm in diameter.
+//
+// NOTE: Adjust the Vref of the DRV8825 drivers to 0.32V while the driver is enabled.
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
@@ -34,7 +36,7 @@ int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps 
 int ArmUpperPos = 32000;         // Float arm upper position (800 steps per mm of vertical lift)
 int ArmLowerPos = 16000;         // Float arm lower position "                                  "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
-int ArmPulse = 500;              // Float Arm stepper pulse width per on/off state (microseconds)
+int ArmPulse = 200;              // Float Arm stepper pulse width per on/off state (microseconds)
 int RotorPulse = 965;            // Rotor stepper pulse width per on/off state (microseconds)
 int RotorSteps = 1600;           // Rotor stepper motor steps per revolution
 int ArmSteps = 800;              // Float arm stepper motor steps per revolution
@@ -200,8 +202,11 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
 //------------------------------------------------------------------------------------------------
 void BumpArm(byte Direction, int Steps) {
   if ((Direction == 0) && (digitalRead(ARM_ZERO_SWITCH) == LOW)) return;
-  Direction = ! Direction;
-  digitalWrite(STEPPER_DIRECTION,Direction);
+  if (Direction == 1) {
+    digitalWrite(STEPPER_DIRECTION,LOW);
+  } else {
+    digitalWrite(STEPPER_DIRECTION,HIGH);
+  }
   digitalWrite(STEPPER_ENABLE_2,HIGH);
   delay(10);
   for (int x = 1; x <= Steps; x ++) {
@@ -415,10 +420,10 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   if ((CurrentMode > 1) && (Xpos < 0)) {
     CurrentMode = 1;
     ActiveButton = 1; 
-    //if (ArmCurrentPos != ArmLowerPos) {
-    //  PopoverMessage("Lowering Float Arm");
-    //  SetArmPos(ArmLowerPos);
-    //}
+    if (ArmCurrentPos != ArmLowerPos) {
+      PopoverMessage("Lowering Float Arm");
+      SetArmPos(ArmLowerPos);
+    }
     SetMemory();
     ScreenUpdate();
     return;
@@ -434,14 +439,14 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
       ActiveButton = 2;
       ScreenUpdate();
       PopoverMessage("Raising Float Arm");
-      //SetArmPos(ArmUpperPos);
+      SetArmPos(ArmUpperPos);
       ActiveButton = 6;
       CurrentMode = 2;
     } else if (RegionPressed(Xpos,Ypos,ArmConfX1,ArmConfY1,ArmConfX2,ArmConfY2)) {
       ActiveButton = 3;
       ScreenUpdate();
       PopoverMessage("Raising Float Arm");
-      //SetArmPos(ArmUpperPos);
+      SetArmPos(ArmUpperPos);
       ActiveButton = 9;
       CurrentMode = 3;
     }
@@ -493,12 +498,16 @@ void IncValue() { // Increment the value associated with the current mode and ac
     Serial.println("Mode 1 Rotor Bump +");
     BumpRotor(1,40);
   } else if (CurrentMode == 2) {
+    Serial.println("Mode 2 Rotor Bump +");
     if (ActiveButton < 6) BumpRotor(1,40);
     if (ActiveButton == 5) {
       RotorSize += 40;
     }
   } else if (CurrentMode == 3) {
-    if (ActiveButton < 9) BumpArm(1,ArmSteps);
+    if (ActiveButton < 9) {
+      Serial.println("Mode 3 Arm Bump +");
+      BumpArm(1,ArmSteps);
+    }
     if (ActiveButton == 7) {
       ArmLowerPos = ArmCurrentPos;
     } else if (ActiveButton == 8) {
@@ -512,13 +521,17 @@ void DecValue() { // Decrement the value associated with the current mode and ac
     Serial.println("Mode 1 Rotor Bump -");
     BumpRotor(0,40);
   } else if (CurrentMode == 2) {
+    Serial.println("Mode 2 Rotor Bump -");
     if (ActiveButton < 6) BumpRotor(0,40);
     if (ActiveButton == 5) {
       RotorSize -= 40;
       if (RotorSize < 0) RotorSize = 0;
     }
   } else if (CurrentMode == 3) {
-    if (ActiveButton < 9) BumpArm(0,ArmSteps);
+    if (ActiveButton < 9) {
+      Serial.println("Mode 3 Arm Bump -");
+      BumpArm(0,ArmSteps);
+    }
     if (ActiveButton == 7) {
       ArmLowerPos = ArmCurrentPos;
     } else if (ActiveButton == 8) {
