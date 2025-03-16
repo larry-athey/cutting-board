@@ -200,15 +200,17 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
   if (! Limit) ArmCurrentPos = Position;
 }
 //------------------------------------------------------------------------------------------------
-void BumpArm(byte Direction, int Steps) {
+void BumpArm(byte Direction, int Steps, bool Hold) {
   if ((Direction == 0) && (digitalRead(ARM_ZERO_SWITCH) == LOW)) return;
   if (Direction == 1) {
     digitalWrite(STEPPER_DIRECTION,LOW);
   } else {
     digitalWrite(STEPPER_DIRECTION,HIGH);
   }
-  digitalWrite(STEPPER_ENABLE_2,HIGH);
-  delay(10);
+  if (! Hold) {
+    digitalWrite(STEPPER_ENABLE_2,HIGH);
+    delay(10);
+  }
   for (int x = 1; x <= Steps; x ++) {
     digitalWrite(STEPPER_PULSE,HIGH);
     delayMicroseconds(ArmPulse);
@@ -225,7 +227,7 @@ void BumpArm(byte Direction, int Steps) {
       }
     }
   }
-  digitalWrite(STEPPER_ENABLE_2,LOW);
+  if (! Hold) digitalWrite(STEPPER_ENABLE_2,LOW);
 }
 //------------------------------------------------------------------------------------------------
 void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forward or backward
@@ -257,17 +259,19 @@ void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
   SetArmPos(ArmLowerPos);
 }
 //-----------------------------------------------------------------------------------------------
-void BumpRotor(byte Direction, int Steps) {
+void BumpRotor(byte Direction, int Steps, bool Hold) {
   digitalWrite(STEPPER_DIRECTION,Direction);
-  digitalWrite(STEPPER_ENABLE_1,HIGH);
-  delay(10);
+  if (! Hold) {
+    digitalWrite(STEPPER_ENABLE_1,HIGH);
+    delay(10);
+  }
   for (int x = 1; x <= Steps; x ++) {
     digitalWrite(STEPPER_PULSE,HIGH);
     delayMicroseconds(RotorPulse);
     digitalWrite(STEPPER_PULSE,LOW);
     delayMicroseconds(RotorPulse);
   }
-  digitalWrite(STEPPER_ENABLE_1,LOW);
+  if (! Hold) digitalWrite(STEPPER_ENABLE_1,LOW);
 }
 //------------------------------------------------------------------------------------------------
 void DrawButton(byte WhichOne) { // Draws and highlights the specified button on the screen
@@ -493,20 +497,20 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
   ScreenUpdate();
 }
 //------------------------------------------------------------------------------------------------
-void IncValue() { // Increment the value associated with the current mode and active screen button
+void IncValue(bool Hold) { // Increment the value associated with the current mode and active screen button
   if (CurrentMode == 1) {
     Serial.println("Mode 1 Rotor Bump +");
-    BumpRotor(1,40);
+    BumpRotor(1,40,Hold);
   } else if (CurrentMode == 2) {
     Serial.println("Mode 2 Rotor Bump +");
-    if (ActiveButton < 6) BumpRotor(1,40);
+    if (ActiveButton < 6) BumpRotor(1,40,Hold);
     if (ActiveButton == 5) {
       RotorSize += 40;
     }
   } else if (CurrentMode == 3) {
     if (ActiveButton < 9) {
       Serial.println("Mode 3 Arm Bump +");
-      BumpArm(1,ArmSteps);
+      BumpArm(1,ArmSteps,Hold);
     }
     if (ActiveButton == 7) {
       ArmLowerPos = ArmCurrentPos;
@@ -516,13 +520,13 @@ void IncValue() { // Increment the value associated with the current mode and ac
   }
 }
 //-----------------------------------------------------------------------------------------------
-void DecValue() { // Decrement the value associated with the current mode and active screen button
+void DecValue(bool Hold) { // Decrement the value associated with the current mode and active screen button
   if (CurrentMode == 1) {
     Serial.println("Mode 1 Rotor Bump -");
-    BumpRotor(0,40);
+    BumpRotor(0,40,Hold);
   } else if (CurrentMode == 2) {
     Serial.println("Mode 2 Rotor Bump -");
-    if (ActiveButton < 6) BumpRotor(0,40);
+    if (ActiveButton < 6) BumpRotor(0,40,Hold);
     if (ActiveButton == 5) {
       RotorSize -= 40;
       if (RotorSize < 0) RotorSize = 0;
@@ -530,7 +534,7 @@ void DecValue() { // Decrement the value associated with the current mode and ac
   } else if (CurrentMode == 3) {
     if (ActiveButton < 9) {
       Serial.println("Mode 3 Arm Bump -");
-      BumpArm(0,ArmSteps);
+      BumpArm(0,ArmSteps,Hold);
     }
     if (ActiveButton == 7) {
       ArmLowerPos = ArmCurrentPos;
@@ -545,22 +549,44 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
 
   if (WhichOne == 1) {
     // Increment active screen button value by 1
-    IncValue();
+    IncValue(false);
     while (digitalRead(INC_BTN) == 0) {
       delay(10);
       HoldCounter ++;
       if ((HoldCounter == 100) && (CurrentMode > 1)) { // User is intentionally holding the + button
-        while (digitalRead(INC_BTN) == 0) IncValue();
+        if (CurrentMode == 2) {
+          digitalWrite(STEPPER_ENABLE_1,HIGH);
+        } else {
+          digitalWrite(STEPPER_ENABLE_2,HIGH);
+        }
+        delay(10);
+        while (digitalRead(INC_BTN) == 0) IncValue(true);
+        if (CurrentMode == 2) {
+          digitalWrite(STEPPER_ENABLE_1,LOW);
+        } else {
+          digitalWrite(STEPPER_ENABLE_2,LOW);
+        }
       }
     }
   } else {
     // Decrement active screen button value by 1
-    DecValue();
+    DecValue(false);
     while (digitalRead(DEC_BTN) == 0) {
       delay(10);
       HoldCounter ++;
       if ((HoldCounter == 100) && (CurrentMode > 1)) { // User is intentionally holding the - button
-        while (digitalRead(DEC_BTN) == 0) DecValue();
+        if (CurrentMode == 2) {
+          digitalWrite(STEPPER_ENABLE_1,HIGH);
+        } else {
+          digitalWrite(STEPPER_ENABLE_2,HIGH);
+        }
+        delay(10);
+        while (digitalRead(DEC_BTN) == 0) DecValue(true);
+        if (CurrentMode == 2) {
+          digitalWrite(STEPPER_ENABLE_2,LOW);
+        } else {
+          digitalWrite(STEPPER_ENABLE_2,LOW);
+        }
       }
     }
   }
