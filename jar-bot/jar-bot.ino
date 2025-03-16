@@ -549,7 +549,7 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
     while (digitalRead(INC_BTN) == 0) {
       delay(10);
       HoldCounter ++;
-      if ((HoldCounter == 150) && (CurrentMode > 1)) { // User is intentionally holding the + button
+      if ((HoldCounter == 100) && (CurrentMode > 1)) { // User is intentionally holding the + button
         while (digitalRead(INC_BTN) == 0) IncValue();
       }
     }
@@ -559,7 +559,7 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
     while (digitalRead(DEC_BTN) == 0) {
       delay(10);
       HoldCounter ++;
-      if ((HoldCounter == 150) && (CurrentMode > 1)) { // User is intentionally holding the - button
+      if ((HoldCounter == 100) && (CurrentMode > 1)) { // User is intentionally holding the - button
         while (digitalRead(DEC_BTN) == 0) DecValue();
       }
     }
@@ -597,6 +597,6 @@ void loop() {
     JarAdvance(1);
   }
   // Give the CPU a break between loops
-  delay(50);
+  delay(10);
 }
 //------------------------------------------------------------------------------------------------
