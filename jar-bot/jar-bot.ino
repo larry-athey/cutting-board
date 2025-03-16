@@ -444,7 +444,6 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
       ActiveButton = 6;
       CurrentMode = 2;
     } else if (RegionPressed(Xpos,Ypos,ArmConfX1,ArmConfY1,ArmConfX2,ArmConfY2)) {
-      ActiveButton = 3;
       ActiveButton = 9;
       CurrentMode = 3;
     }
