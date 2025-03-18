@@ -31,6 +31,7 @@
 #define ARM_ZERO_SWITCH 12       // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
 bool GotInterrupt = false;       // True if touch input has been detected on the screen
+long LoopCounter = 0;
 int RotorSize = 20736;           // Rotor (turntable) circumference in motor steps
 int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
 int ArmUpperPos = 32000;         // Float arm upper position (800 steps per mm of vertical lift)
@@ -86,7 +87,7 @@ void setup() {
   GetMemory();
   if (JarDistance == 0) {
     // New chip, flash memory not initialized
-    Serial.println("Initializing flash memory");
+    if (Serial) Serial.println("Initializing flash memory");
     RotorSize   = 20736;
     ArmUpperPos = 32000;
     ArmLowerPos = 16000;
@@ -103,9 +104,9 @@ void setup() {
   if (Touch.init()) {
     pinMode(TOUCH_INT,INPUT_PULLUP);
     attachInterrupt(TOUCH_INT,[] { GotInterrupt = true; },FALLING);
-    Serial.println("Touch screen interface initialized");
+    if (Serial) Serial.println("Touch screen interface initialized");
   } else {
-    Serial.println("Touch screen interface not detected");
+    if (Serial) Serial.println("Touch screen interface not detected");
   }
 
   // Power up the screen and backlight
@@ -132,6 +133,8 @@ void setup() {
   // Move the float arm to its down position
   //SetArmPos(ArmLowerPos);
   //ScreenUpdate();
+
+  LoopCounter = millis();
 }
 //------------------------------------------------------------------------------------------------
 void GetMemory() { // Get the last calibration settings from flash memory on startup
@@ -250,17 +253,19 @@ void SwitchJars(byte Direction) { // Rotates the turntable/rotor 45 degrees forw
 //-----------------------------------------------------------------------------------------------
 void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
   ScreenUpdate();
-  if (Direction == 1) {
-    Serial.println("Mode 1 Jar Advance +");
-  } else {
-    Serial.println("Mode 1 Jar Advance -");
+  if (Serial) {
+    if (Direction == 1) {
+      Serial.println("Mode 1 Jar Advance +");
+    } else {
+      Serial.println("Mode 1 Jar Advance -");
+    }
   }
   PopoverMessage("New Jar Selected");
-  Serial.println("Raising Float Arm");
+  if (Serial) Serial.println("Raising Float Arm");
   SetArmPos(ArmUpperPos);
-  Serial.println("Advancing Jar Position");
+  if (Serial) Serial.println("Advancing Jar Position");
   SwitchJars(Direction);
-  Serial.println("Lowering Float Arm");
+  if (Serial) Serial.println("Lowering Float Arm");
   SetArmPos(ArmLowerPos);
 }
 //-----------------------------------------------------------------------------------------------
@@ -368,14 +373,16 @@ void PopoverMessage(String Msg) { // Display popover message to the user
 //------------------------------------------------------------------------------------------------
 void ScreenUpdate() { // Plot the off-screen buffer and then pop it to the touch screen display
   if (CurrentMode == 1) {
-    // Debugging information
-    Serial.println();
-    Serial.print("RotorSize: "); Serial.println(RotorSize);
-    Serial.print("JarDistance: "); Serial.println(JarDistance);
-    Serial.print("ArmUpperPos: "); Serial.println(ArmUpperPos);
-    Serial.print("ArmLowerPos: "); Serial.println(ArmLowerPos);
-    Serial.print("ArmCurrentPos: "); Serial.println(ArmCurrentPos);
-    Serial.println();
+    if (Serial) {
+      // Debugging information
+      Serial.println();
+      Serial.print("RotorSize: "); Serial.println(RotorSize);
+      Serial.print("JarDistance: "); Serial.println(JarDistance);
+      Serial.print("ArmUpperPos: "); Serial.println(ArmUpperPos);
+      Serial.print("ArmLowerPos: "); Serial.println(ArmLowerPos);
+      Serial.print("ArmCurrentPos: "); Serial.println(ArmCurrentPos);
+      Serial.println();
+    }
 
     canvas->fillScreen(BLACK);
     DrawButton(0);
@@ -463,7 +470,7 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
       ActiveButton = 6;
       ScreenUpdate();
       PopoverMessage("Advancing Jar Position");
-      Serial.println("Mode 3 Jar Advance +");
+      if (Serial) Serial.println("Mode 3 Jar Advance +");
       SwitchJars(1);
     }
   } else if (CurrentMode == 3) {
@@ -495,17 +502,17 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
 //------------------------------------------------------------------------------------------------
 void IncValue(bool Hold) { // Increment the value associated with the current mode and active screen button
   if (CurrentMode == 1) {
-    Serial.println("Mode 1 Rotor Bump +");
+    if (Serial) Serial.println("Mode 1 Rotor Bump +");
     BumpRotor(1,40,Hold);
   } else if (CurrentMode == 2) {
-    Serial.println("Mode 2 Rotor Bump +");
+    if (Serial) Serial.println("Mode 2 Rotor Bump +");
     if (ActiveButton < 6) BumpRotor(1,40,Hold);
     if (ActiveButton == 5) {
       RotorSize += 40;
     }
   } else if (CurrentMode == 3) {
     if (ActiveButton < 9) {
-      Serial.println("Mode 3 Arm Bump +");
+      if (Serial) Serial.println("Mode 3 Arm Bump +");
       BumpArm(1,ArmSteps,Hold);
     }
     if (ActiveButton == 7) {
@@ -518,10 +525,10 @@ void IncValue(bool Hold) { // Increment the value associated with the current mo
 //-----------------------------------------------------------------------------------------------
 void DecValue(bool Hold) { // Decrement the value associated with the current mode and active screen button
   if (CurrentMode == 1) {
-    Serial.println("Mode 1 Rotor Bump -");
+    if (Serial) Serial.println("Mode 1 Rotor Bump -");
     BumpRotor(0,40,Hold);
   } else if (CurrentMode == 2) {
-    Serial.println("Mode 2 Rotor Bump -");
+    if (Serial) Serial.println("Mode 2 Rotor Bump -");
     if (ActiveButton < 6) BumpRotor(0,40,Hold);
     if (ActiveButton == 5) {
       RotorSize -= 40;
@@ -529,7 +536,7 @@ void DecValue(bool Hold) { // Decrement the value associated with the current mo
     }
   } else if (CurrentMode == 3) {
     if (ActiveButton < 9) {
-      Serial.println("Mode 3 Arm Bump -");
+      if (Serial) Serial.println("Mode 3 Arm Bump -");
       BumpArm(0,ArmSteps,Hold);
     }
     if (ActiveButton == 7) {
@@ -586,17 +593,24 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
       }
     }
   }
-  // Debugging information
-  if (ActiveButton == 5) {
-    Serial.print("RotorSize: "); Serial.println(RotorSize);
-  } else if (ActiveButton == 7) {
-    Serial.print("ArmLowerPos: "); Serial.println(ArmLowerPos);
-  } else if (ActiveButton == 8) {
-    Serial.print("ArmUpperPos: "); Serial.println(ArmUpperPos);
+  if (Serial) {
+    // Debugging information
+    if (ActiveButton == 5) {
+      Serial.print("RotorSize: "); Serial.println(RotorSize);
+    } else if (ActiveButton == 7) {
+      Serial.print("ArmLowerPos: "); Serial.println(ArmLowerPos);
+    } else if (ActiveButton == 8) {
+      Serial.print("ArmUpperPos: "); Serial.println(ArmUpperPos);
+    }
   }
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
+  long CurrentTime = millis();
+  if (CurrentTime > 4200000000) {
+    ESP.restart();
+  }
+
   // Check for touch-screen presses and handle as necessary
   if (GotInterrupt) {
     if (Touch.read()) {
@@ -604,8 +618,10 @@ void loop() {
       TP_Point Point = Touch.getPoint(0);
       Xpos = 320 - Point.y; // Touch.setRotation() doesn't work for some reason
       Ypos = Point.x;       // "                                              "
-      ProcessTouch(Xpos,Ypos);
-      delay(1000);
+      if (CurrentTime - LoopCounter >= 1000) {
+        ProcessTouch(Xpos,Ypos);
+        LoopCounter = CurrentTime;
+      }
     }
     GotInterrupt = false;
   }
