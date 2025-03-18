@@ -614,6 +614,7 @@ void loop() {
   if ((CurrentMode == 1) && (digitalRead(FLOAT_SWITCH) == LOW)) {
     ActiveButton = 1;
     JarAdvance(1);
+    ScreenUpdate();
   }
   // Give the CPU a break between loops
   delay(10);
