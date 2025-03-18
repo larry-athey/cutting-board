@@ -203,7 +203,10 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
 }
 //------------------------------------------------------------------------------------------------
 void BumpArm(byte Direction, int Steps, bool Hold) {
-  if ((Direction == 0) && (digitalRead(ARM_ZERO_SWITCH) == LOW)) return;
+  if ((Direction == 0) && (digitalRead(ARM_ZERO_SWITCH) == LOW)) {
+    ArmCurrentPos = 0;
+    return;
+  }
   if (Direction == 1) {
     digitalWrite(STEPPER_DIRECTION,LOW);
   } else {
