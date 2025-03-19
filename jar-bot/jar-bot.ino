@@ -128,11 +128,11 @@ void setup() {
   ScreenUpdate();
 
   // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
-  //PopoverMessage("Calibrating Float Arm");
-  //InitializeArm();
+  PopoverMessage("Calibrating Float Arm");
+  InitializeArm();
   // Move the float arm to its down position
-  //SetArmPos(ArmLowerPos);
-  //ScreenUpdate();
+  SetArmPos(ArmLowerPos);
+  ScreenUpdate();
 
   LoopCounter = millis();
 }
@@ -163,14 +163,14 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
     digitalWrite(STEPPER_PULSE,HIGH);
     delayMicroseconds(ArmPulse);
     digitalWrite(STEPPER_PULSE,LOW);
-    delayMicroseconds(RotorPulse);
+    delayMicroseconds(ArmPulse);
   }
   digitalWrite(STEPPER_DIRECTION,HIGH);
   while(digitalRead(ARM_ZERO_SWITCH) == HIGH) { // Lower the arm to find zero
     digitalWrite(STEPPER_PULSE,HIGH);
     delayMicroseconds(ArmPulse);
     digitalWrite(STEPPER_PULSE,LOW);
-    delayMicroseconds(RotorPulse);
+    delayMicroseconds(ArmPulse);
   }
   digitalWrite(STEPPER_ENABLE_2,LOW);
 }
@@ -178,6 +178,7 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
 void SetArmPos(int Position) { // Move the float arm up or down to a specific position
   int Steps;
   bool Limit = false;
+  long Uptime = millis();
 
   if (Position > ArmCurrentPos) {
     digitalWrite(STEPPER_DIRECTION,LOW);
@@ -195,7 +196,7 @@ void SetArmPos(int Position) { // Move the float arm up or down to a specific po
     delayMicroseconds(ArmPulse);
     digitalWrite(STEPPER_PULSE,LOW);
     delayMicroseconds(ArmPulse);
-    if (digitalRead(ARM_ZERO_SWITCH) == LOW) {
+    if ((Uptime > 15000) && (digitalRead(ARM_ZERO_SWITCH) == LOW)) {
       ArmCurrentPos = 0;
       Limit = true;
       break;
