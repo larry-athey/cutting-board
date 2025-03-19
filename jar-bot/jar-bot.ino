@@ -38,7 +38,7 @@ int ArmUpperPos = 32000;         // Float arm upper position (800 steps per mm o
 int ArmLowerPos = 16000;         // Float arm lower position "                                  "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int ArmPulse = 200;              // Float Arm stepper pulse width per on/off state (microseconds)
-int RotorPulse = 965;            // Rotor stepper pulse width per on/off state (microseconds)
+int RotorPulse = 800;            // Rotor stepper pulse width per on/off state (microseconds)
 int RotorSteps = 1600;           // Rotor stepper motor steps per revolution
 int ArmSteps = 800;              // Float arm stepper motor steps per revolution
 byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
