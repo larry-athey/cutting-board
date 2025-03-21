@@ -7,7 +7,7 @@ You may contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
 
 **Facebook Idiot:** _Why would you bother?_<br>
-**Me:** It's only a "bother" for somebody who couldn't do it if they had to. I'd rather have nicer things.
+**Me:** It's only a "bother" for somebody who couldn't do it on their best day. I'd rather have nicer things.
 
 ---
 
