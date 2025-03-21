@@ -11,6 +11,9 @@ Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandleP
 
 ---
 
+<img width="1024" src="https://github.com/user-attachments/assets/2f6683b3-9e3e-424a-8368-6645c56e3bdd">
+
+
 This project is the result of numerous requests for the same additional feature to the [RPi Smart Still](https://github.com/larry-athey/rpi-smart-still) system. However, this would actually be a stand-alone device rather than a feature of that system.
 
 Keep in mind that this is a prototype project, not a cosmetically polished product that I intend to sell as a kit. These aren't hard to build, but if you're not a computer/electronics hobbyist, you'll want to find somebody who is to build it for you. Honestly, kids in STEM classes build this kind of stuff all the time.
