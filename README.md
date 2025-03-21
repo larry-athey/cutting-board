@@ -11,7 +11,7 @@ Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandleP
 
 ---
 
-<img width="1024" src="https://github.com/user-attachments/assets/2f6683b3-9e3e-424a-8368-6645c56e3bdd">
+<img width="1024" src="https://github.com/user-attachments/assets/2f6683b3-9e3e-424a-8368-6645c56e3bdd"><br>
 
 
 This project is the result of numerous requests for the same additional feature to the [RPi Smart Still](https://github.com/larry-athey/rpi-smart-still) system. However, this would actually be a stand-alone device rather than a feature of that system.
