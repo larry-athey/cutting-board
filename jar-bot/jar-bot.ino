@@ -1,9 +1,36 @@
 //------------------------------------------------------------------------------------------------
 // Jar-Bot - Cutting Board Brain | (CopyLeft) 2025-Present | Larry Athey (https://panhandleponics.com)
 //
-// The following lazy susan turntable was used during development https://www.amazon.com/dp/B0C65XVDGS
+// I have no plans of making this project a turn key kit and I'm sure that other people can come up
+// with better ways of driving the turntable and detecting when a jar is full. I would have used a
+// timing belt to drive the turntable, but it would have required me to have a router table to make
+// a seat for one to be glued around the edge of the turntable to turn it into a big gear. Friction
+// drive was my only option.
+//
+// The following lazy Susan turntable was used during development https://www.amazon.com/dp/B0C65XVDGS
 // This is advertised as 14", but measures 350 mm in diameter.
 //
+// Determining the liquid level in the jar is tricky because ethanol isn't conductive and it's not
+// exactly possible to do it optically without the use of a camera and a boatload of crazy code to
+// perform comparisons between the empty appearance of the jar and what it looks like now. So, the
+// float and a zero-force switch was all that I could think of.
+//
+// If somebody else wants to expand upon this project and make it all pretty, as well as design a
+// printed circuit board to simplify assembly, be my guest! I only took on this project due to a
+// number of requests since I uploaded the first video introducing the RPi Smart Still controller
+// system. It seems that some people think the smart still controller is lacking because it can't
+// do automatic cuts. Never mind the fact that Genio and iStill also don't do that either.
+//
+// Well, here ya go, it can do automatic cuts now. I've never been one of those cuts guys, I just
+// redistill everything until it smooths out and it usually only requires one time unless it's rum
+// or something absolute neutral. I'm mainly an all-grain bourbon distiller, single redistillation
+// and it instantly goes on toasted oak chips to age. I've never had a single complaint about it.
+//
+// One of the main reasons that I wouldn't sell the existing prototype system as a kit is because
+// the friction drive has a small degree of slip and occasionally requires a bump on the + button
+// to push the turntable ahead. Not a big deal to me, but I'm sure that somebody out there would
+// pitch a fit over it. So, once again, if you want one of these, you'll have to build your own.
+// 
 // NOTE: Adjust the Vref of the DRV8825 drivers to 0.32V while the driver is enabled.
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
