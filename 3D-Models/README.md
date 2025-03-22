@@ -8,4 +8,4 @@ The model **CB-Flange-Gripper.stl** should be printed with TPU or other rubber-l
 
 A 22 mm flange from Amazon (https://www.amazon.com/dp/B0BF46M4NH) was used here. I recommend attaching the gripper to the flange with silicone and allowing it to set up, then use 10 mm M2 self-tapping screws to lock it in place. This allows you to make sure that the gripper is centered on the flange before driving screws into it.
 
-As for the **CB-Float-Actuator.stl** model, be sure to sand down the area about 5mm below the cross member so that it doesn't bind against its opening at the end of the float arm. This actuator only needs to rise about 1mm to tell the ESP32 brain that the jar is full. But if it binds, you could end up over filling a jar.
+As for the **CB-Float-Actuator.stl** model, be sure to sand down the area about 5mm below the cross member so that it doesn't bind against its opening at the end of the float arm. This actuator only needs to rise about 1mm to tell the ESP32 brain that the jar is full. But if it binds, you could end up over filling a jar and making a huge mess.
