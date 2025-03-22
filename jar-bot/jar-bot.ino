@@ -58,11 +58,11 @@
 #define ARM_ZERO_SWITCH 12       // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
 bool GotInterrupt = false;       // True if touch input has been detected on the screen
-long LoopCounter = 0;
+long LoopCounter = 0;            // Used for debouncing the touch screen
 int RotorSize = 20736;           // Rotor (turntable) circumference in motor steps
 int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
 int ArmUpperPos = 32000;         // Float arm upper position (800 steps per mm of vertical lift)
-int ArmLowerPos = 16000;         // Float arm lower position "                                  "
+int ArmLowerPos = 16000;         // Float arm lower position "                                 "
 int ArmCurrentPos = 0;           // Current vertical position of the float arm
 int ArmPulse = 200;              // Float Arm stepper pulse width per on/off state (microseconds)
 int RotorPulse = 800;            // Rotor stepper pulse width per on/off state (microseconds)
