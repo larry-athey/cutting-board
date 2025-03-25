@@ -31,7 +31,9 @@
 // to push the turntable ahead. Not a big deal to me, but I'm sure that somebody out there would
 // pitch a fit over it. So, once again, if you want one of these, you'll have to build your own.
 // 
-// NOTE: Adjust the Vref of the DRV8825 drivers to 0.32V while the driver is enabled.
+// NOTE: The DRV8825 for the float arm is configured for 1/4 steps and 1/8 steps for the rotor.
+//       Refer to the M0/M1/M2 connections in the schematic. Adjust the Vref for each DRV8825
+//       driver to 0.32V while the motors are running.
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
