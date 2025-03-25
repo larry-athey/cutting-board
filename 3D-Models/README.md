@@ -14,4 +14,4 @@ You will also likely need to progressively sand off the top edge of the **CB-Flo
 
 Since the linear actuator that raises and lowers the float arm is nothing high tech, it will be noisy at times unless you add some kind of buffer on the internal slider. For example, I applied blue painter's tape to the sides and back of **CB-Riser-Inside-Pint.stl** to tame down vibration noise. Adding two layers also helps tighten up the fit between the two sections.
 
-If you are running a large still and want to fill quart jars, you will want to use the **CB-Riser-Inside-Quart.stl** model instead of the pint size version that I used. The vertical travel distance is still the same, you just use a taller inside riser with the linear actuator.
+If you are running a largee still and need to fill quart jars, you will want to use the **CB-Riser-Inside-Quart.stl** model instead of the pint size version that I used. The vertical travel distance is still the same, you just use a taller inside riser with the linear actuator.
