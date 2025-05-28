@@ -1,6 +1,13 @@
 //------------------------------------------------------------------------------------------------
 // Jar-Bot - Cutting Board Brain | (CopyLeft) 2025-Present | Larry Athey (https://panhandleponics.com)
 //
+// Tested up to Espressif ESP32 v2.0.14 due to LilyGo requirements
+//
+// This code requires the LilyGo T-Display-S3 ESP32 board. You will first need to properly set up
+// your Arduino IDE to upload to that board. See: https://github.com/Xinyuan-LilyGO/T-Display-S3
+// Make sure that you only install the Espressif ESP32 v2.0.14 board library since the 3.x stuff
+// is not backward compatible and will throw syntax errors all over the place. (Nice fkin upgrade)
+//
 // I have no plans of making this project a turn key kit and I'm sure that other people can come up
 // with better ways of driving the turntable and detecting when a jar is full. I would have used a
 // timing belt to drive the turntable, but it would have required me to have a router table to make
