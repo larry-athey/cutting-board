@@ -10,7 +10,6 @@ Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandleP
 **Me:** It's only a "bother" for somebody who couldn't do it on their best day. I'd rather have nicer things.
 
 ---
-
 <img width="1024" src="https://github.com/user-attachments/assets/f81af1a5-49f3-4f62-80f4-b8a433ef83a9"><br>
 ---
 
