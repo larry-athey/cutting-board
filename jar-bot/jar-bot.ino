@@ -643,7 +643,7 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
-  long CurrentTime = millis();
+  unsigned long CurrentTime = millis();
   if (CurrentTime > 4200000000) {
     ESP.restart();
   }
