@@ -7,36 +7,6 @@
 // your Arduino IDE to upload to that board. See: https://github.com/Xinyuan-LilyGO/T-Display-S3
 // Make sure that you only install the Espressif ESP32 v2.0.14 board library since the 3.x stuff
 // is not backward compatible and will throw syntax errors all over the place. (Nice fkin upgrade)
-//
-// I have no plans of making this project a turn key kit and I'm sure that other people can come up
-// with better ways of driving the turntable and detecting when a jar is full. I would have used a
-// timing belt to drive the turntable, but it would have required me to have a router table to make
-// a seat for one to be glued around the edge of the turntable to turn it into a big gear. Friction
-// drive was my only option.
-//
-// The following lazy Susan turntable was used during development https://www.amazon.com/dp/B0C65XVDGS
-// This is advertised as 14", but measures 350 mm in diameter.
-//
-// Determining the liquid level in the jar is tricky because ethanol isn't conductive and it's not
-// exactly possible to do it optically without the use of a camera and a boatload of crazy code to
-// perform comparisons between the empty appearance of the jar and what it looks like now. So, the
-// float and a zero-force switch was all that I could think of.
-//
-// If somebody else wants to expand upon this project and make it all pretty, as well as design a
-// printed circuit board to simplify assembly, be my guest! I only took on this project due to a
-// number of requests since I uploaded the first video introducing the RPi Smart Still controller
-// system. It seems that some people think the smart still controller is lacking because it can't
-// do automatic cuts. Never mind the fact that Genio and iStill also don't do that either.
-//
-// Well, here ya go, it can do automatic cuts now. I've never been one of those cuts guys, I just
-// redistill everything until it smooths out and it usually only requires one time unless it's rum
-// or something absolute neutral. I'm mainly an all-grain bourbon distiller, single redistillation
-// and it instantly goes on toasted oak chips to age. I've never had a single complaint about it.
-//
-// One of the main reasons that I wouldn't sell the existing prototype system as a kit is because
-// the friction drive has a small degree of slip and occasionally requires a bump on the + button
-// to push the turntable ahead. Not a big deal to me, but I'm sure that somebody out there would
-// pitch a fit over it. So, once again, if you want one of these, you'll have to build your own.
 // 
 // NOTE: The DRV8825 for the float arm is configured for 1/4 steps and 1/8 steps for the rotor.
 //       Refer to the M0/M1/M2 connections in the schematic. Adjust the Vref for each DRV8825
@@ -63,7 +33,7 @@
 #define STEPPER_ENABLE_2 2       // Arm stepper motor driver enable
 #define STEPPER_DIRECTION 3      // Stepper motor direction (paralleled for both DRV8825 drivers)
 #define STEPPER_PULSE 10         // Stepper motor pulse line (paralleled for both DRV8825 drivers)
-#define TOUCH_SWITCH 11          // TTP223 touch switch signal pin (capacitive float switch)
+#define TOUCH_SWITCH 11          // TTP223 touch switch signal pin (formerly an optical switch)
 #define ARM_ZERO_SWITCH 12       // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
 bool GotInterrupt = false;       // True if touch input has been detected on the screen
