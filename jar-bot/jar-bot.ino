@@ -7,6 +7,12 @@
 // your Arduino IDE to upload to that board. See: https://github.com/Xinyuan-LilyGO/T-Display-S3
 // Make sure that you only install the Espressif ESP32 v2.0.14 board library since the 3.x stuff
 // is not backward compatible and will throw syntax errors all over the place. (Nice fkin upgrade)
+//
+// The TTP223 capacitive touch switch uses a 4" dipstick soldered to the touch plate area of the
+// PCB. This is made from a piece of 14 gauge solid core wire from common household Romex wire.
+// Cut off a piece about 4.5" long, strip 1/2" from one end and 1/4" from the other. Bend a loop
+// in the 1/2" end and solder it to the touch plate. Add a 33pf capacitor between the touch plate
+// and ground because this dipstick will become a big antenna and will pick up tons of RF noise.
 // 
 // NOTE: The DRV8825 for the float arm is configured for 1/4 steps and 1/8 steps for the rotor.
 //       Refer to the M0/M1/M2 connections in the schematic. Adjust the Vref for each DRV8825
