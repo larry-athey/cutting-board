@@ -668,9 +668,16 @@ void loop() {
   if (digitalRead(DEC_BTN) == 0) ProcessButton(0);
   // If not in configuation mode, check the float switch and advance to the next jar if necessary
   if ((CurrentMode == 1) && (digitalRead(TOUCH_SWITCH) == HIGH)) {
-    ActiveButton = 1;
-    JarAdvance(1);
-    ScreenUpdate();
+    byte FloatCounter = 0;
+    while (digitalRead(TOUCH_SWITCH) == HIGH) {
+      delay(250);
+      FloatCounter ++;
+      if (FloatCounter == 8) { // Require 2 seconds of high readings to filter out false triggers
+        ActiveButton = 1;
+        JarAdvance(1);
+        ScreenUpdate();
+      }
+    }
   }
   // Give the CPU a break between loops
   delay(10);
