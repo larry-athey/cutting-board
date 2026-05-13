@@ -19,7 +19,7 @@ _Keep in mind that this is a prototype project, not a cosmetically polished prod
 
 Many people seem to think that it's possible for a computer to know what flavors they prefer _(or not)_ in their distillate. Sorry, AI can't even do that because it would require gas chromatography to determine what's in there at what concentrations, and that's anything but a quick process. Then the AI would need to be trained on what you like or dislike. Seriously, lay off the sci-fi movies, they're anything but based on reality.
 
-No, Genio and iStill don't have this capability, either. The most they can do is pause the run so you can toss your heads/foreshots based on the volume and ABV of the wash in your boiler. What's more, it's just based on an approximation using simple math, there's honestly nothing high tech about it.
+No, Genio and iStill don't have this capability, either. The most they can do is pause the run so you can toss your heads/foreshots based on the volume and ABV of the wash in your boiler. What's more, it's just based on an approximation using simple math, there's honestly nothing high tech about what they're doing.
 
 This device allows you to automate your cuts by automatically swapping out jars once they are filled about one inch from the top. These can be pint or quart size Mason jars placed on any diameter Lazy Susan turntable under your condenser outlet. You simply calibrate the controller to the circumference of your turntable, then cycle through the eight 45 degree positions and put your jars in place on the turntable.
 
