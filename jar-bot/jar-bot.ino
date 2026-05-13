@@ -63,7 +63,7 @@
 #define STEPPER_ENABLE_2 2       // Arm stepper motor driver enable
 #define STEPPER_DIRECTION 3      // Stepper motor direction (paralleled for both DRV8825 drivers)
 #define STEPPER_PULSE 10         // Stepper motor pulse line (paralleled for both DRV8825 drivers)
-#define FLOAT_SWITCH 11          // Optical float switch sense pin
+#define TOUCH_SWITCH 11          // TTP223 touch switch signal pin (capacitive float switch)
 #define ARM_ZERO_SWITCH 12       // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
 bool GotInterrupt = false;       // True if touch input has been detected on the screen
@@ -116,8 +116,8 @@ void setup() {
   pinMode(STEPPER_ENABLE_2,OUTPUT); digitalWrite(STEPPER_ENABLE_2,LOW);
   pinMode(STEPPER_PULSE,OUTPUT);
   pinMode(STEPPER_DIRECTION,OUTPUT);
-  pinMode(FLOAT_SWITCH,INPUT_PULLUP);    // GPIO pin goes low when the light beam is obstructed
-  pinMode(ARM_ZERO_SWITCH,INPUT_PULLUP); // "                                                 "
+  pinMode(TOUCH_SWITCH,INPUT_PULLDOWN);  // GPIO pin goes high when the switch is activated
+  pinMode(ARM_ZERO_SWITCH,INPUT_PULLUP); // GPIO pin goes low when the light beam is obstructed
 
   // Get the last calibration settings from flash memory
   GetMemory();
@@ -667,7 +667,7 @@ void loop() {
   // Check for Value- keypresses and handle as necessary
   if (digitalRead(DEC_BTN) == 0) ProcessButton(0);
   // If not in configuation mode, check the float switch and advance to the next jar if necessary
-  if ((CurrentMode == 1) && (digitalRead(FLOAT_SWITCH) == LOW)) {
+  if ((CurrentMode == 1) && (digitalRead(TOUCH_SWITCH) == HIGH)) {
     ActiveButton = 1;
     JarAdvance(1);
     ScreenUpdate();
