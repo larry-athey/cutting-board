@@ -9,7 +9,7 @@
 // is not backward compatible and will throw syntax errors all over the place. (Nice fkin upgrade)
 //
 // The TTP223 capacitive touch switch uses a 4" dipstick soldered to the touch plate area of the
-// PCB. This is made from a piece of 14 gauge solid core wire from common household Romex wire.
+// PCB. This is made from a piece of 14 gauge solid core wire from common household Romex cable.
 // Cut off a piece about 4.5" long, strip 1/2" from one end and 1/4" from the other. Bend a loop
 // in the 1/2" end and solder it to the touch plate. Add a 33pf capacitor between the touch plate
 // and ground because this dipstick will become a big antenna and will pick up tons of RF noise.
