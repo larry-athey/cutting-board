@@ -321,7 +321,7 @@ void DrawButton(byte WhichOne) { // Draws and highlights the specified button on
     canvas->fillRoundRect(ArmConfX1,ArmConfY1,ArmConfX2 - ArmConfX1,ArmConfY2 - ArmConfY1,5,MODEBTN);
     canvas->setCursor(ArmConfX1 + 41,ArmConfY1 + 33);
     canvas->print("Configure");
-    canvas->setCursor(ArmConfX1 + 35,ArmConfY1 + 57);
+    canvas->setCursor(ArmConfX1 + 33,ArmConfY1 + 57);
     canvas->print("Sensor Arm");
     if (ActiveButton == 3) canvas->drawRoundRect(ArmConfX1,ArmConfY1,ArmConfX2 - ArmConfX1,ArmConfY2 - RotConfY1,5,HILITE);
   } else if (WhichOne == 4) {
