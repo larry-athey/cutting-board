@@ -10,4 +10,6 @@ A 22 mm flange from Amazon (https://www.amazon.com/dp/B0BF46M4NH) was used here.
 
 Since the linear actuator that raises and lowers the float arm is nothing high tech, it will be noisy at times unless you add some kind of buffer on the internal slider. For example, I applied blue painter's tape to the sides and back of **CB-Riser-Inside-Pint.stl** to tame down vibration noise. Most arts & crafts stores sell velvet tape to prevent items from scratching table tops, which would probably be a better choice in this case.
 
+The model **CB-Turntable-Segment.stl** needs to be printed four times and are meant to be attached to the top of a 12" to 13" Lazy Susan. These provide placement markers for your jars and the gear drive that the model **CB-Flange-Gripper.stl** meshes with.
+
 If you are running a larger still and need to fill quart jars, you will want to use the **CB-Riser-Inside-Quart.stl** model instead of the pint size version that I used. The vertical travel distance is still the same, you're just using a taller inside riser with the linear actuator.
