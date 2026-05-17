@@ -2,7 +2,7 @@
 
 No, I haven't put any effort into a fancy case here because this whole project is nothing but a prototype, it's pretty much just a 3D printed version of what Radio Shack used to sell. The front half of the [Airhead](https://github.com/larry-athey/airhead) case and buttons are used for the LilyGo T-Display S3 here. Install your Lilygo in the front half of the case and use four M3 bolts and nuts to mount it to the **CB-Case-Top.stl** model.
 
-Ultimately, my plan is to have the case for the LilyGo T-Display S3 and all of the electronics joined with the motor mount and linear actuator.
+Ultimately, my plan is to have the case for the LilyGo T-Display S3 and all of the electronics joined with the motor mount and linear actuator. This project kinda got put on the back burner because of other tasks, so this is a slow work in progress.
 
 <img width="1024" src="https://github.com/user-attachments/assets/58808227-68ae-4d1a-b59f-1ea3bf1fd624">
 
