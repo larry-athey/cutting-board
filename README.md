@@ -25,6 +25,6 @@ This device allows you to automate your cuts by automatically swapping out jars 
 
 ## Theory of Operation
 
-The system design is based on two 20mm Nema 17 stepper motors, an optical switch, and a capacitve touch switch connected to a LilyGo T-Display S3 touch screen ESP32 module. One motor drives the turntable using gear drive by way of a TPU 3D printed geared pulley against the edge of a custom 3D printed turntable top. The other motor drives a 3D printed DIY linear actuator that raises and lowers an arm with a capacitive touch switch to detect when a jar is full.
+The system design is based on two 20mm Nema 17 stepper motors, an optical switch, and a capacitve touch switch connected to a LilyGo T-Display S3 touch screen ESP32 module. One motor drives the turntable using gear drive by way of a TPU 3D printed geared pulley against the geared edge of a custom 3D printed turntable top. The other motor drives a 3D printed DIY linear actuator that raises and lowers an arm with a capacitive touch switch to detect when a jar is full.
 
 Once a jar is full, the liquid will come in contact with a copper dipstick/antenna at the end of the arm to trigger a capacitive touch switch. This tells the ESP32 to raise the arm, advance the turntable 45 degrees to the next jar position, then lower the arm again. There is an optical switch is on the linear actuator frame itself to detect when it is at it's zero position. A calibration procedure runs at every startup to find the zero position of the linear actuator.
