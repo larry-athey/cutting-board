@@ -1,5 +1,5 @@
 # Cutting Board
-Automated robotic jar advancer for making distillation cuts. Supports pint or quart size Mason jars and requires up to a 13" Lazy Susan turntable.
+Automated robotic jar advancer for making distillation cuts. Supports pint or quart size Mason jars and requires any 12" - 13" Lazy Susan turntable.
 
 _**This project began on February 19, 2024 and does not yet have a first official release.**_
 
@@ -21,7 +21,7 @@ Many people seem to think that it's possible for a computer to know what flavors
 
 No, Genio and iStill don't have this capability, either. The most they can do is pause the run so you can toss your heads/foreshots based on the volume and ABV of the wash in your boiler. What's more, it's just based on an approximation using simple math, there's honestly nothing high tech about what they're doing.
 
-This device allows you to automate your cuts by automatically swapping out jars once they are filled about 1/2 inch from the top. These can be pint or quart size Mason jars placed on any diameter Lazy Susan turntable under your condenser outlet. You simply calibrate the controller to the circumference of your turntable, then cycle through the eight 45 degree positions and put your jars in place on the turntable.
+This device allows you to automate your cuts by automatically swapping out jars once they are filled about 1/2 inch from the top. These can be pint or quart size Mason jars placed on the 3D printed turntable segments attached to any 12" - 13" Lazy Susan turntable under your condenser or parrot outlet. The calibration procedure is simple and only needs to be performed one time.
 
 ## Theory of Operation
 
