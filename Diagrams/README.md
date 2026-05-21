@@ -5,3 +5,5 @@ You may notice that the printed circuit board used here isn't as fancy as the bo
 Keep in mind that the LilyGo T-Display S3 mounts to the bottom side of the PCB and only uses the pins on the bottom edge of the board _(note the +3V and +5V identifiers for orientation)_. This is intentional to make the motor and sensor connections serviceable without the need to disasseble the whole controller unit.
 
 The footprint for VR1 looks like a TO-220 mounting for an LM7803, but is intended for a small 3.3 volt buck regulator which are available from various sources that use the same footprint. I don't recommend using an LM7803 due to the heat that they all generate.
+
+Fritzing didn't allow me to label the pins of the screw terminals for the sensors. If you're looking at the screw terminals straight on with the top of the PCB upward, the GND is on the left, the +3V is on the right, and the signal line is in the middle.
