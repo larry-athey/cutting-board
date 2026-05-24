@@ -23,7 +23,9 @@ No, Genio and iStill don't have this capability, either. The most they can do is
 
 This device allows you to automate your cuts by automatically swapping out jars once they are filled about 1/2 inch from the top. These can be pint or quart size Mason jars placed on the 3D printed turntable segments attached to any 12" - 13" Lazy Susan turntable under your condenser or parrot outlet. The calibration procedure is simple and only needs to be performed one time.
 
-_Oddly enough, even after posting numerous YouTube videos on this project, some people still think this is supposed to be something more than a robotic jar advancer with a jar-full switch. One more time for the people asleep in the back of the room, **you can't do electronic cuts by flavor compound without gas chromatography!**_
+---
+
+_Oddly enough, even after posting numerous YouTube videos on this project, some people still think this is supposed to be something more than a robotic jar advancer with a jar-full switch. One more time for the people asleep in the back of the room, **you can't do electronic cuts by flavor compound without slowpoke gas chromatography!**_
 
 ## Theory of Operation
 
