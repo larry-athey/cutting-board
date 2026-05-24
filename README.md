@@ -27,6 +27,8 @@ This device allows you to automate your cuts by automatically swapping out jars 
 
 _Oddly enough, even after posting numerous YouTube videos on this project, some people still think this is supposed to be something more than a robotic jar advancer with a jar-full switch. One more time for the people asleep in the back of the room, **you can't do electronic cuts by flavor compound without slowpoke gas chromatography!**_
 
+---
+
 ## Theory of Operation
 
 The system design is based on two 20mm Nema 17 stepper motors, an optical switch, and a capacitve touch switch connected to a LilyGo T-Display S3 touch screen ESP32 module. One motor drives the turntable using gear drive by way of a TPU 3D printed geared pulley against the geared edge of a custom 3D printed turntable top. The other motor drives a custom linear actuator that raises and lowers an arm with a capacitive touch switch to detect when a jar is full.
