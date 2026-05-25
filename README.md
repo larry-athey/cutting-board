@@ -25,7 +25,7 @@ This device allows you to automate your cuts by automatically swapping out jars 
 
 ---
 
-_Oddly enough, even after posting numerous YouTube videos on this project, some people still think this is supposed to be something more than a robotic jar advancer with a jar-full switch. One more time for the people asleep in the back of the room, **you can't do electronic cuts by flavor compound without slowpoke gas chromatography!** Even if you did, by the time you get your results, they will say that you needed to change jars a couple hours ago._
+_Oddly enough, even after posting numerous YouTube videos on this project, some people still think this is supposed to be something more than a robotic jar advancer with a jar-full switch. One more time for the people asleep in the back of the room, **you can't do electronic cuts by flavor compound without slowpoke gas chromatography!** Even if you did, by the time you get your results, they would say that you needed to switch jars a couple hours ago._
 
 ---
 
