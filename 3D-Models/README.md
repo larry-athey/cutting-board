@@ -4,7 +4,7 @@ No, I haven't put any effort into a fancy case here because this whole project i
 
 Ultimately, my plan is to have the case for the LilyGo T-Display S3 and all of the electronics joined together with the motor mount and linear actuator. This plan kinda got put on the back burner because of other tasks, so this is a slow work in progress.
 
-<img width="1024" src="https://github.com/user-attachments/assets/22f67f4b-0f5f-4093-bb8e-3657d956cdb0">
+<img width="1024" src="https://github.com/user-attachments/assets/22f67f4b-0f5f-4093-bb8e-3657d956cdb0"><br>
 
 The model **CB-Flange-Gripper.stl** should be printed with TPU or other rubber-like filament to reduce noise and vibrations. A 22 mm flange from Amazon (https://www.amazon.com/dp/B0BF46M4NH) was used to attach it to the stepper motor. I recommend attaching the gripper to the flange with silicone and allowing it to set up, then use 10 mm M2 self-tapping screws to lock it in place. This allows you to make sure that the gripper is centered on the flange before driving screws into it.
 
