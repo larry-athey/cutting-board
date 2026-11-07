@@ -16,7 +16,7 @@
 // 
 // NOTE: The DRV8825 for the float arm is configured for 1/4 steps and 1/8 steps for the rotor.
 //       Refer to the M0/M1/M2 connections in the schematic. Adjust the Vref for each DRV8825
-//       driver to 0.32V while the motors are running.
+//       driver to 0.5 volts while the motors are running.
 //------------------------------------------------------------------------------------------------
 #include "Arduino_GFX_Library.h" // Standard GFX library for Arduino, built with version 1.4.9
 #include "FreeSans9pt7b.h"       // https://github.com/moononournation/ArduinoFreeFontFile.git 
