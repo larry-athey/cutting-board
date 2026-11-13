@@ -24,6 +24,7 @@
 #include "Wire.h"                // I2C communications library for touch-screen interface
 #define TOUCH_MODULES_CST_SELF   // Tell TouchLib.h to use the CST816 chip routines
 #include "TouchLib.h"            // LilyGo touch-screen interface library
+#include "ota_update.h"          // Over-The-Air firmware updating library
 //------------------------------------------------------------------------------------------------
 // Internal GPIO constants
 #define SCL 17                   // I2C clock pin
@@ -43,6 +44,7 @@
 #define ARM_ZERO_SWITCH 12       // Optical arm zero position sense pin
 //------------------------------------------------------------------------------------------------
 bool GotInterrupt = false;       // True if touch input has been detected on the screen
+bool UpdateMode = false;         // True if the unit is in firmware update mode
 long LoopCounter = 0;            // Used for debouncing the touch screen
 int RotorSize = 20736;           // Rotor (turntable) circumference in motor steps
 int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
@@ -139,12 +141,67 @@ void setup() {
   canvas->begin();
   ScreenUpdate();
 
-  // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
-  PopoverMessage("Calibrating Float Arm");
-  InitializeArm();
-  // Move the float arm to its down position
-  SetArmPos(ArmLowerPos);
-  ScreenUpdate();
+  // If the Value- is being pressed, activate the firmware update mode
+  if (digitalRead(DEC_BTN) == 0) {
+    UpdateMode = true;
+    PopoverMessage("Firmware Update Mode");
+    Serial.println("Starting Airhead Firmware Updater (AP mode)...");
+  
+    // Both DRV8825 drivers are enabled in firmware update mode so you can adjust the current limiting (set both drivers to 0.5v)
+    digitalWrite(STEPPER_ENABLE_1,HIGH);
+    digitalWrite(STEPPER_ENABLE_2,HIGH);
+
+    // Start WiFi Access Point
+    WiFi.mode(WIFI_AP);
+    uint8_t protocol = WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N;
+    esp_wifi_set_protocol(WIFI_IF_AP,protocol);
+    esp_wifi_set_bandwidth(WIFI_IF_AP,WIFI_BW_HT20);
+    esp_wifi_set_max_tx_power(84);
+    WiFi.softAP(ap_ssid,ap_password,6);
+    IPAddress myIP = WiFi.softAPIP();
+    Serial.print("AP IP address: ");
+    Serial.println(myIP);
+
+    // Set the server home page, sent upon browser connection
+    server.on("/",HTTP_GET,[]() {
+      server.send(200,"text/html",serverIndex);
+    });
+
+    // Set the OTA firmware update handler
+    server.on("/update",HTTP_POST,[]() {
+      server.sendHeader("Connection","close");
+      server.send(200,"text/plain",(Update.hasError()) ? "FAIL" : "OK");
+      ESP.restart();
+    },[]() {
+      HTTPUpload& upload = server.upload();
+      if (upload.status == UPLOAD_FILE_START) {
+        Serial.printf("Update: %s\n",upload.filename.c_str());
+        if (!Update.begin(UPDATE_SIZE_UNKNOWN)) {
+          Update.printError(Serial);
+        }
+      } else if (upload.status == UPLOAD_FILE_WRITE) {
+        if (Update.write(upload.buf,upload.currentSize) != upload.currentSize) {
+          Update.printError(Serial);
+        }
+      } else if (upload.status == UPLOAD_FILE_END) {
+        if (Update.end(true)) {
+          Serial.printf("Update Success: %u bytes\n",upload.totalSize);
+        } else {
+          Update.printError(Serial);
+        }
+      }
+    });
+
+    server.begin();
+    Serial.println("HTTP server ready. Connect to the AP and go to 192.168.4.1");
+  } else {
+    // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
+    PopoverMessage("Calibrating Float Arm");
+    InitializeArm();
+    // Move the float arm to its down position
+    SetArmPos(ArmLowerPos);
+    ScreenUpdate();
+  }
 
   LoopCounter = millis();
 }
@@ -619,6 +676,12 @@ void ProcessButton(byte WhichOne) { // Handle increment/decrement button inputs
 }
 //------------------------------------------------------------------------------------------------
 void loop() {
+  if (UpdateMode) {
+    server.handleClient();
+    delay(1);
+    return;
+  }
+
   unsigned long CurrentTime = millis();
   if (CurrentTime > 4200000000) {
     ESP.restart();
