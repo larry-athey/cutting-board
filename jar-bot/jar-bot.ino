@@ -14,7 +14,7 @@
 // in the 1/2" end and solder it to the touch plate. Add a 33pf capacitor between the touch plate
 // and ground because this dipstick will become a big antenna and will pick up tons of RF noise.
 // 
-// NOTE: The DRV8825 for the float arm is configured for 1/4 steps and 1/8 steps for the rotor.
+// NOTE: The DRV8825 for the sensor arm is configured for 1/4 steps and 1/8 steps for the rotor.
 //       Refer to the M0/M1/M2 connections in the schematic. Adjust the Vref for each DRV8825
 //       driver to 0.5 volts while in firmware update mode and steppers connected.
 //------------------------------------------------------------------------------------------------
@@ -48,14 +48,14 @@ bool UpdateMode = false;         // True if the unit is in firmware update mode
 long LoopCounter = 0;            // Used for debouncing the touch screen
 int RotorSize = 20736;           // Rotor (turntable) circumference in motor steps
 int JarDistance = RotorSize / 8; // Total motor steps between jars (motor steps to move 45 degrees)
-int ArmUpperPos = 32000;         // Float arm upper position (800 steps per mm of vertical lift)
-int ArmLowerPos = 16000;         // Float arm lower position "                                 "
-int ArmCurrentPos = 0;           // Current vertical position of the float arm
-int ArmPulse = 200;              // Float Arm stepper pulse width per on/off state (microseconds)
+int ArmUpperPos = 32000;         // Sensor arm upper position (800 steps per mm of vertical lift)
+int ArmLowerPos = 16000;         // Sensor arm lower position "                                 "
+int ArmCurrentPos = 0;           // Current vertical position of the sensor arm
+int ArmPulse = 200;              // Sensor Arm stepper pulse width per on/off state (microseconds)
 int RotorPulse = 800;            // Rotor stepper pulse width per on/off state (microseconds)
 int RotorSteps = 1600;           // Rotor stepper motor steps per revolution
-int ArmSteps = 800;              // Float arm stepper motor steps per revolution
-byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Float Arm Config
+int ArmSteps = 800;              // Sensor arm stepper motor steps per revolution
+byte CurrentMode = 1;            // 1 = Home Screen, 2 = Rotor Config, 3 = Sensor Arm Config
 byte ActiveButton = 1;           // Currently selected touch-screen button
 String Version = "1.0.1";        // Current release version of the project
 //------------------------------------------------------------------------------------------------
@@ -195,10 +195,10 @@ void setup() {
     server.begin();
     Serial.println("HTTP server ready. Connect to the AP and go to 192.168.4.1");
   } else {
-    // Initialize the float arm by raising it 5 mm and then lowering it until the lower limit switch triggers
-    PopoverMessage("Calibrating Float Arm");
+    // Initialize the sensor arm by raising it 5 mm and then lowering it until the lower limit switch triggers
+    PopoverMessage("Calibrating Sensor Arm");
     InitializeArm();
-    // Move the float arm to its down position
+    // Move the sensor arm to its down position
     SetArmPos(ArmLowerPos);
     ScreenUpdate();
   }
@@ -224,7 +224,7 @@ void SetMemory() { // Update flash memory with the current calibration settings
   JarDistance = RotorSize / 8;
 }
 //------------------------------------------------------------------------------------------------
-void InitializeArm() { // Set the float arm to it's lower limit position to locate absolute zero
+void InitializeArm() { // Set the sensor arm to it's lower limit position to locate absolute zero
   digitalWrite(STEPPER_ENABLE_2,HIGH);
   delay(10);
   digitalWrite(STEPPER_DIRECTION,LOW);
@@ -244,7 +244,7 @@ void InitializeArm() { // Set the float arm to it's lower limit position to loca
   digitalWrite(STEPPER_ENABLE_2,LOW);
 }
 //------------------------------------------------------------------------------------------------
-void SetArmPos(int Position) { // Move the float arm up or down to a specific position
+void SetArmPos(int Position) { // Move the sensor arm up or down to a specific position
   int Steps;
   bool Limit = false;
   long Uptime = millis();
@@ -331,11 +331,11 @@ void JarAdvance(byte Direction) { // Lift the arm, switch jars, lower the arm
     }
   }
   PopoverMessage("New Jar Selected");
-  if (Serial) Serial.println("Raising Float Arm");
+  if (Serial) Serial.println("Raising Sensor Arm");
   SetArmPos(ArmUpperPos);
   if (Serial) Serial.println("Advancing Jar Position");
   SwitchJars(Direction);
-  if (Serial) Serial.println("Lowering Float Arm");
+  if (Serial) Serial.println("Lowering Sensor Arm");
   SetArmPos(ArmLowerPos);
 }
 //-----------------------------------------------------------------------------------------------
@@ -502,7 +502,7 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
     CurrentMode = 1;
     ActiveButton = 1; 
     if (ArmCurrentPos != ArmLowerPos) {
-      PopoverMessage("Lowering Float Arm");
+      PopoverMessage("Lowering Sensor Arm");
       SetArmPos(ArmLowerPos);
     }
     SetMemory();
@@ -519,7 +519,7 @@ void ProcessTouch(int Xpos,int Ypos) { // Handle touch-screen presses
     } else if (RegionPressed(Xpos,Ypos,RotConfX1,RotConfY1,RotConfX2,RotConfY2)) {
       ActiveButton = 2;
       ScreenUpdate();
-      PopoverMessage("Raising Float Arm");
+      PopoverMessage("Raising Sensor Arm");
       SetArmPos(ArmUpperPos);
       ActiveButton = 6;
       CurrentMode = 2;
@@ -705,13 +705,13 @@ void loop() {
   if (digitalRead(INC_BTN) == 0) ProcessButton(1);
   // Check for Value- keypresses and handle as necessary
   if (digitalRead(DEC_BTN) == 0) ProcessButton(0);
-  // If not in configuation mode, check the float switch and advance to the next jar if necessary
+  // If not in configuation mode, check the sensor switch and advance to the next jar if necessary
   if ((CurrentMode == 1) && (digitalRead(TOUCH_SWITCH) == HIGH)) {
-    byte FloatCounter = 0;
+    byte sensorCounter = 0;
     while (digitalRead(TOUCH_SWITCH) == HIGH) {
       delay(250);
-      FloatCounter ++;
-      if (FloatCounter == 8) { // Require 2 seconds of high readings to filter out false triggers
+      sensorCounter ++;
+      if (sensorCounter == 8) { // Require 2 seconds of high readings to filter out false triggers
         ActiveButton = 1;
         JarAdvance(1);
         ScreenUpdate();
