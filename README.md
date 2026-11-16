@@ -17,8 +17,6 @@ _...No, I don't use AI to design and build my projects, I actually still know ho
 
 This project is the result of numerous requests for the same additional feature to the [RPi Smart Still](https://github.com/larry-athey/rpi-smart-still) system. However, this would actually be a stand-alone device rather than a feature of that system.
 
-_Keep in mind that this is a prototype project, not a cosmetically polished product that I intend to sell as a kit. These aren't hard to build, but if you're not a computer/electronics hobbyist, you'll want to find somebody who is to build one for you. Honestly, kids in STEM classes build this kind of stuff all the time._
-
 Many people seem to think that it's possible for a computer to know what flavors they prefer _(or not)_ in their distillate. Sorry, AI can't even do that because it would require gas chromatography to determine what's in there at what concentrations, and that's anything but a quick process. Then the AI would need to be trained on what you like or dislike. Seriously, lay off the sci-fi movies, they're anything but based on reality.
 
 No, Genio and iStill don't have this capability, either. The most they can do is pause the run so you can toss your heads/foreshots based on the volume and ABV of the wash in your boiler. What's more, it's just based on an approximation using simple math, there's honestly nothing high tech about what they're doing.
