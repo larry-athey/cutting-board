@@ -31,4 +31,4 @@ Once a jar is full, the liquid will come into contact with a copper dipstick/ant
 
 An optional feed arm may be attached that uses a 1/4" ID silicone tube from the proofing parrot to the jar that automatically kinks the tube between jar switches. Not a requirement and not really necessary if you are using wide-mouth jars. But, the travel time between small-mouth jars can lead to a bit of mess on the turntable without it.
 
-_**NOTE:** If you are making absolute lighter fluid (the typical Still Spirits T500 fare) the capacitive touch switch may not detect when a jar is full until it's right up to the brim. This is because the density of pure ethanol is so incredibly low._
+_**NOTE:** If you are making absolute lighter fluid (the typical Still Spirits T500 fare) the capacitive touch switch may not detect when a jar is full until it's right up to the brim. This is because liquid density makes a difference and 180 proof is pushing the limit._
