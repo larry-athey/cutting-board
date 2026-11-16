@@ -6,4 +6,4 @@ Keep in mind that the LilyGo T-Display S3 mounts to the bottom side of the PCB a
 
 The footprint for VR1 looks like a TO-220 mounting for an LM7803, but is intended for a small 3.3 volt buck regulator which are available from various sources that use the same footprint. I don't recommend using an LM7803 due to the heat that linear regulators generate.
 
-Fritzing didn't allow me to label the pins of the screw terminals for the sensors. If you're looking at the screw terminals straight on with the top of the PCB upward, the GND is on the left, the +3V is on the right, and the signal line is in the middle.
+Fritzing didn't allow me to label the pins of the screw terminals for the sensors. If you're looking at the screw terminals straight on with the component side of the PCB upward, the GND is on the left, the +3V is on the right, and the signal line is in the middle.
