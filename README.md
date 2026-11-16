@@ -1,8 +1,6 @@
 # Cutting Board
 Automated robotic jar advancer for making distillation cuts. Supports pint or quart size Mason jars and requires any 12" - 13" Lazy Susan turntable.
 
-_**This project began on February 19, 2024 and does not yet have a first official release.**_
-
 You may contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
 
@@ -10,6 +8,8 @@ Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandleP
 **Me:** It's only a "bother" for somebody who couldn't do it on their best day. I'd rather have nicer things.
 
 _...No, I don't use AI to design and build my projects, I actually still know how to use my brain..._
+
+_**This project began on February 19, 2024 and is scheduled for a first official release in January, 2027.**_
 
 ---
 <img width="1024" alt="image" src="https://github.com/user-attachments/assets/ac67fffb-ea16-4bee-b143-bc8b68bdbcf1"><br>
