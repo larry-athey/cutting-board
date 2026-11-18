@@ -6,7 +6,7 @@ The front half of the [Airhead](https://github.com/larry-athey/airhead) case and
 
 The model **CB-Flange-Gripper.stl** should be printed with TPU or other rubber-like filament to reduce noise and vibrations. A 22 mm flange from Amazon (https://www.amazon.com/dp/B0BF46M4NH) was used to attach it to the stepper motor. I recommend attaching the gripper to the flange with silicone and allowing it to set up, then use 10 mm M2 self-tapping screws to lock it in place. This allows you to make sure that the gripper is centered on the flange before driving screws into it.
 
-Since the linear actuator that raises and lowers the detector arm is nothing high tech, it may be noisy at times unless you add some kind of buffer on the internal slider. This problem can be quickly solved by adding some kind of heavy-ish grease to both parts of the riser, such as Lubriplate or Super Lube gel.
+Since the linear actuator that raises and lowers the detector arm is nothing high tech, it may be noisy at times unless you add some kind of buffer to it. This problem can be quickly solved by applying some kind of heavy-ish grease to both parts of the riser, such as Lubriplate or Super Lube gel.
 
 The model **CB-Turntable-Segment.stl** must be printed four times and needs to be attached to the top of a 12" to 13" Lazy Susan to form a full circle. These provide placement markers for your jars and the gear drive that the model **CB-Flange-Gripper.stl** meshes with. You will want to apply some sort of [non-skid surface](https://www.amazon.com/dp/B0DZXWTQV2) or silicone coasters to the placement markers to keep your jars in place and immune to vibrations. Make absolutely sure that these four segments are perfectly centered and there are no gaps between them.
 
