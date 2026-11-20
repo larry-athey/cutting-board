@@ -19,8 +19,6 @@ This project is the result of numerous requests for the same additional feature 
 
 Many people seem to think that it's possible for a computer to know what flavors they prefer _(or not)_ in their distillate. Sorry, AI can't even do that because it would require gas chromatography to determine what's in there at what concentrations, and that's anything but a quick process. By the time you get your results, the AI would say that you should have changed jars 45 minutes ago.
 
-Then the AI would need to be trained on what you like or dislike. The only place that this is plausible is in a Sci-Fi movie.
-
 No, Genio and iStill don't have this capability, either. The most they can do is pause the run so you can toss your heads/foreshots based on the volume and ABV of the wash in your boiler. What's more, it's just based on an approximation using simple math, there's honestly nothing high tech about what they're doing.
 
 This device allows you to automate your cuts by automatically swapping out jars once they are filled about 1/2 inch from the top. These can be pint or quart size Mason jars placed on the 3D printed turntable segments attached to any 12" - 13" Lazy Susan turntable under your condenser or parrot outlet. The calibration procedure is simple and only needs to be performed one time.
