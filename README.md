@@ -1,5 +1,5 @@
 # Cutting Board
-Automated robotic jar advancer for making distillation cuts. Supports pint or quart size Mason jars and requires any 12" - 13" Lazy Susan turntable.
+Automated robotic jar advancer for making distillation cuts or any other automated jar filling purpose. Supports pint or quart size Mason jars and requires any 12" - 13" Lazy Susan turntable.
 
 You may contact me directly at https://panhandleponics.com<br>
 Subscribe to the official YouTube channel at https://www.youtube.com/@PanhandlePonics<br>
